@@ -7,25 +7,34 @@ namespace IOCL_Training_Module.Models
     {
         [Key]
         [Required]
-        [StringLength(50)] // Adjust length based on database constraints
-        public required string TrainingID { get; set; }  // Primary Key (varchar)
+        [StringLength(50)]
+        public required string TrainingID { get; set; }
 
         [Required]
         [StringLength(200)]
-        public required string TrainingName { get; set; }  // Training Name (nvarchar)
+        public required string TrainingName { get; set; }
 
         [Required]
-        [Range(1, 365, ErrorMessage = "Duration must be between 1 and 365 days.")]
-        public int Duration { get; set; }  // Duration (int)
+        [Range(1, 365)]
+        public int Duration { get; set; }
 
         [Required]
         [StringLength(100)]
-        public required string Venue { get; set; }  // Venue (nvarchar)
+        public required string Venue { get; set; }
 
         [StringLength(100)]
-        public string? Department { get; set; }  // Nullable (nvarchar)
+        public string? Department { get; set; }
 
-        [Range(1, 120, ErrorMessage = "Validity must be between 1 and 120 months.")]
-        public int? Validity { get; set; }  // Nullable (Months)
+        [Range(1, 120)]
+        public int? Validity { get; set; }
+
+        // 🔹 Add These Properties
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime FromDate { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime ToDate { get; set; }
     }
 }
