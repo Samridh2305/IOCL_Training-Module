@@ -23,7 +23,6 @@ namespace IOCL_Training_Module.Controllers
                 return View(null);
             }
 
-            // Fetch Employee Details
             var employee = await _context.Employees
                 .FirstOrDefaultAsync(e => e.EmpNo == empNo);
 
@@ -32,25 +31,21 @@ namespace IOCL_Training_Module.Controllers
                 return NotFound("Employee not found.");
             }
 
-            // Fetch Completed Trainings from CompletedTrainings table
             var completedTrainings = await _context.CompletedTrainings
                 .Where(c => c.EmpNo == empNo)
-                .Include(c => c.Training) // Load training details
+                .Include(c => c.Training)
                 .ToListAsync();
 
-            // Fetch Not Completed Trainings from NotCompletedTrainings table
             var notCompletedTrainings = await _context.NotCompletedTrainings
                 .Where(nc => nc.EmpNo == empNo)
-                .Include(nc => nc.Training) // Load training details
+                .Include(nc => nc.Training)
                 .ToListAsync();
 
-            // Fetch Recurring Trainings from RecurringTasks table
             var recurringTrainings = await _context.RecurringTasks
                 .Where(rt => rt.EmpNo == empNo)
-                .Include(rt => rt.Training) // Load training details
+                .Include(rt => rt.Training)
                 .ToListAsync();
 
-            // Populate ViewModel
             var viewModel = new DashboardViewModel
             {
                 Employee = employee,
@@ -60,6 +55,21 @@ namespace IOCL_Training_Module.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> NotCompleted(string empNo)
+        {
+            if (string.IsNullOrEmpty(empNo))
+            {
+                return RedirectToAction("Index");
+            }
+
+            var notCompletedTrainings = await _context.NotCompletedTrainings
+                .Where(nc => nc.EmpNo == empNo)
+                .Include(nc => nc.Training)
+                .ToListAsync();
+
+            return View(notCompletedTrainings);
         }
     }
 }

@@ -26,9 +26,10 @@
     <!-- Hamburger Menu -->
     <div class="menu-toggle" onclick="toggleMenu()">☰ Menu</div>
     <div class="sidebar">
-        <a href="#" onclick="showSection('completed')">Completed Trainings</a>
-        <a href="#" onclick="showSection('notCompleted')">Not Completed Trainings</a>
+        <a href="javascript:void(0);" onclick="showSection('completed')">Completed Trainings</a>
+        <a href="javascript:void(0);" onclick="showSection('notCompleted')">Not Completed Trainings</a>
     </div>
+
 
     <div class="container content">
         <h2>Employee Dashboard</h2>
@@ -101,11 +102,16 @@
             sidebar.style.left = (sidebar.style.left === "0px") ? "-250px" : "0px";
         }
 
-        function showSection(section) {
-            document.getElementById('completed').style.display = 'none';
-            document.getElementById('notCompleted').style.display = 'none';
-            document.getElementById(section).style.display = 'block';
+                function showSection(section) {
+            document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+            let targetSection = document.getElementById(section);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            } else {
+                console.error("Section not found:", section);
+            }
         }
+
     </script>
 
 </body>

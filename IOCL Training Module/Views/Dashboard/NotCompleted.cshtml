@@ -1,0 +1,38 @@
+﻿@model List<IOCL_Training_Module.Models.NotCompleted>
+
+@{
+    ViewData["Title"] = "Not Completed Trainings";
+}
+
+<div class="container mt-4">
+    <h2>Not Completed Trainings</h2>
+
+    @if (Model.Any())
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Training Code</th>
+                    <th>Training Name</th>
+                    <th>Employee No</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var training in Model)
+                {
+                    <tr>
+                        <td>@training.Code</td>
+                        <td>@training.Training?.TrainingName ?? "N/A"</td>
+                        <td>@training.EmpNo</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No not completed trainings found.</p>
+    }
+
+    <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary">Back to Dashboard</a>
+</div>
