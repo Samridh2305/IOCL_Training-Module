@@ -28,7 +28,6 @@ namespace IOCL_Training_Module.Models
         [Range(1, 120)]
         public int? Validity { get; set; }
 
-        // 🔹 Add These Properties
         [Required]
         [DataType(DataType.Date)]
         public DateTime FromDate { get; set; }

@@ -64,7 +64,7 @@ namespace IOCL_Training_Module.Data
 
             // 🔹 Employee Reporting Table (Self-referencing Employee)
             modelBuilder.Entity<EmployeeReporting>()
-                .HasKey(r => r.SrNo);  // ✅ Updated for EmployeeReporting
+                .HasKey(r => r.SrNo);  
 
             modelBuilder.Entity<EmployeeReporting>()
                 .HasOne(r => r.Employee)
