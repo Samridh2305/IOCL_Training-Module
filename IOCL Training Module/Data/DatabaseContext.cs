@@ -12,7 +12,7 @@ namespace IOCL_Training_Module.Data
         public DbSet<Completed> CompletedTrainings { get; set; }
         public DbSet<NotCompleted> NotCompletedTrainings { get; set; }
         public DbSet<RecurringTraining> RecurringTasks { get; set; }
-        public DbSet<EmployeeReporting> Reportings { get; set; }  // ✅ Renamed from `Reporting` to `EmployeeReporting`
+        public DbSet<EmployeeReporting> Reportings { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

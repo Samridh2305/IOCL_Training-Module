@@ -71,5 +71,19 @@ namespace IOCL_Training_Module.Controllers
 
             return View(notCompletedTrainings);
         }
+
+        public async Task<IActionResult> Completed(string empNo)
+        {
+            if (string.IsNullOrEmpty(empNo))
+            {
+                return NotFound("Employee number is required.");
+            }
+
+            var completedTrainings = await _context.CompletedTrainings
+                .Where(c => c.EmpNo == empNo)
+                .ToListAsync();
+
+            return View(completedTrainings);
+        }
     }
 }
