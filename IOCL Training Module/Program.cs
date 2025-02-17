@@ -1,21 +1,31 @@
 using IOCL_Training_Module.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Register Entity Framework Core with SQL Server
+// Configure Database Context
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ✅ Add Authentication & Authorization Services
-builder.Services.AddAuthentication();
+// Add Authentication and Authorization
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Redirect to login page
+        options.AccessDeniedPath = "/Account/AccessDenied";
+    });
+
 builder.Services.AddAuthorization();
 
-// ✅ Add MVC and Razor Pages
+// Add MVC and Razor Pages
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+// Add session services
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -29,14 +39,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-// ✅ Enable Authentication & Authorization Middleware
+app.UseSession(); // Enable session middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
-// ✅ Map MVC and Razor Pages
+// Set default route to Login page
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.MapRazorPages();
 

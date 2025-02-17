@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Employee Dashboard";
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,88 +12,163 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .sidebar { width: 250px; height: 100vh; position: fixed; left: -250px; top: 0; background: #343a40; padding-top: 60px; transition: 0.3s; }
-        .sidebar a { padding: 15px; text-decoration: none; font-size: 18px; color: white; display: block; }
-        .sidebar a:hover { background: #575d63; }
-        .menu-toggle { font-size: 24px; cursor: pointer; color: black; margin: 10px; }
-        .content { margin-left: 30px; transition: 0.3s; }
-        .table th, .table td { text-align: center; }
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: -250px;
+            top: 0;
+            background: #343a40;
+            padding-top: 60px;
+            transition: 0.3s;
+        }
+
+            .sidebar a {
+                padding: 15px;
+                text-decoration: none;
+                font-size: 18px;
+                color: white;
+                display: block;
+            }
+
+                .sidebar a:hover {
+                    background: #575d63;
+                }
+
+        .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            margin: 10px;
+        }
+
+        .content {
+            margin-left: 30px;
+            transition: 0.3s;
+        }
+
+        .table th, .table td {
+            text-align: center;
+        }
+
+        .employee-info, .training-section {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Hamburger Menu -->
+    <!-- Sidebar Navigation -->
     <div class="menu-toggle" onclick="toggleMenu()">☰ Menu</div>
     <div class="sidebar">
-        <a href="@Url.Action("Completed", "Dashboard", new { empNo = Model?.Employee?.EmpNo })">Completed Trainings</a>
-        <a href="@Url.Action("NotCompleted", "Dashboard", new { empNo = Model?.Employee?.EmpNo })">Not Completed Trainings</a>
-    </div>
+        <a href="@Url.Action("Completed", "Dashboard", new { selectedEmpNo = Model?.Employee?.EmpNo })" class="btn btn-success">
+            Completed Trainings
+        </a>
 
+        <a href="@Url.Action("NotCompleted", "Dashboard", new { selectedEmpNo = Model?.Employee?.EmpNo })" class="btn btn-warning">
+           Not Completed Trainings
+        </a>
+
+    </div>
 
     <div class="container content">
         <h2>Employee Dashboard</h2>
 
-        <!-- Search Employee -->
+        <!-- Employee Selection Form -->
         <form method="get">
-            <label for="empNo">Enter Employee No:</label>
-            <input type="text" id="empNo" name="empNo" required />
-            <button type="submit" class="btn btn-primary">Search</button>
+            <label for="selectedEmpNo">Select Employee:</label>
+            <select id="selectedEmpNo" name="selectedEmpNo" class="form-control" required onchange="this.form.submit()">
+                <option value="">-- Select Employee --</option>
+
+                @if (Model?.LoggedInEmployee != null) 
+                {
+                    <option value="@Model.LoggedInEmployee.EmpNo" selected="@(Model.Employee?.EmpNo == Model.LoggedInEmployee.EmpNo ? "selected" : null)">
+                        @Model.LoggedInEmployee.EmpNo - @Model.LoggedInEmployee.Name (You)
+                    </option>
+                }
+
+                @if (Model?.ReportingEmployees != null && Model.ReportingEmployees.Any())
+                {
+                    foreach (var emp in Model.ReportingEmployees)
+                    {
+                        <option value="@emp?.EmpNo" selected="@(Model.Employee?.EmpNo == emp?.EmpNo ? "selected" : null)">
+                            @(emp?.EmpNo ?? "N/A") - @(emp?.Name ?? "Unknown")
+                        </option>
+                    }
+                }
+            </select>
         </form>
 
-        @if (Model?.Employee != null)
-        {
-            <!-- Employee Information -->
+        <div class="employee-info" id="employeeInfo">
             <h3>Employee Details</h3>
             <table class="table table-bordered">
-                <tr><th>Employee No</th><td>@Model.Employee.EmpNo</td></tr>
-                <tr><th>Name</th><td>@Model.Employee.Name</td></tr>
-                <tr><th>Department</th><td>@Model.Employee.EmpDepartment</td></tr>
-                <tr><th>Designation</th><td>@Model.Employee.EmpDesignation</td></tr>
+                @if (Model?.Employee != null)
+                {
+                    <tr><th>Employee No</th><td>@Model.Employee.EmpNo</td></tr>
+                    <tr><th>Name</th><td>@Model.Employee.Name</td></tr>
+                    <tr><th>Department</th><td>@Model.Employee.EmpDepartment</td></tr>
+                    <tr><th>Designation</th><td>@Model.Employee.EmpDesignation</td></tr>
+                }
             </table>
+        </div>
 
-            <!-- Completed Trainings -->
-            <div id="completed" class="section">
-                <h3>Completed Trainings</h3>
-                <table class="table table-striped">
-                    <tr>
-                        <th>Training ID</th>
-                        <th>From Date</th>
-                        <th>To Date</th>
-                    </tr>
-                    @foreach (var training in Model.CompletedTrainings)
+        <!-- Completed Trainings -->
+        <div class="training-section" id="completed">
+            <h3>Completed Trainings</h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>Training ID</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                </tr>
+                @if (Model?.CompletedTrainings != null && Model.CompletedTrainings.Any())
+                {
+                    foreach (var training in Model.CompletedTrainings)
                     {
                         <tr>
-                            <td>@training.CompletedTraining</td> <!-- Updated -->
+                            <td>@training.CompletedTraining</td>
                             <td>@training.FromDate.ToShortDateString()</td>
                             <td>@training.ToDate.ToShortDateString()</td>
                         </tr>
                     }
-                </table>
-            </div>
+                }
+                else
+                {
+                    <tr><td colspan="3">No completed trainings.</td></tr>
+                }
+            </table>
+        </div>
 
-            <!-- Not Completed Trainings -->
-            <div id="notCompleted" class="section" style="display:none;">
-                <h3>Not Completed Trainings</h3>
-                <table class="table table-striped">
-                    <tr>
-                        <th>Training ID</th>
-                        <th>From Date</th>
-                        <th>To Date</th>
-                    </tr>
-                    @foreach (var training in Model.NotCompletedTrainings)
+        <!-- Not Completed Trainings -->
+        <div class="training-section" id="notCompleted">
+            <h3>Not Completed Trainings</h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>Training ID</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                </tr>
+                @if (Model?.NotCompletedTrainings != null && Model.NotCompletedTrainings.Any())
+                {
+                    foreach (var training in Model.NotCompletedTrainings)
                     {
                         <tr>
-                            <td>@training.Code</td> <!-- Since Code is the Foreign Key -->
-                            <td>@(training.Training != null ? training.Training.FromDate.ToShortDateString() : "N/A")</td>
-                            <td>@(training.Training != null ? training.Training.ToDate.ToShortDateString() : "N/A")</td>
-
+                            <td>@training.Code</td>
+                            <td>@(training.Training?.FromDate.ToShortDateString() ?? "N/A")</td>
+                            <td>@(training.Training?.ToDate.ToShortDateString() ?? "N/A")</td>
                         </tr>
-
                     }
-                </table>
-            </div>
-        }
+                }
+                else
+                {
+                    <tr><td colspan="3">No pending trainings.</td></tr>
+                }
+            </table>
+        </div>
     </div>
 
     <script>
@@ -101,11 +177,15 @@
             sidebar.style.left = (sidebar.style.left === "0px") ? "-250px" : "0px";
         }
 
-        function showSection(section) {
-            document.getElementById('completed').style.display = 'none';
-            document.getElementById('notCompleted').style.display = 'none';
-            document.getElementById(section).style.display = 'block';
-        }
+        // Show employee info and training tables only if an employee is selected
+        document.addEventListener("DOMContentLoaded", function () {
+            var selectedEmpNo = document.getElementById("selectedEmpNo").value;
+
+            if (selectedEmpNo) {
+                document.getElementById("employeeInfo").style.display = "block";
+                document.querySelectorAll(".training-section").forEach(el => el.style.display = "block");
+            }
+        });
     </script>
 
 </body>
