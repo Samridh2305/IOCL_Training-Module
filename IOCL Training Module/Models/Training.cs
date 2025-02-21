@@ -14,7 +14,7 @@ namespace IOCL_Training_Module.Models
         [StringLength(200)]
         public required string TrainingName { get; set; }
 
-        [Required]
+        [Required] 
         [Range(1, 365)]
         public int Duration { get; set; }
 

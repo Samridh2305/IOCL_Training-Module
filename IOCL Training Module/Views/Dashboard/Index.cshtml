@@ -11,26 +11,24 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .sidebar { width: 250px; height: 100vh; position: fixed; left: -250px; top: 0; background: #343a40; padding-top: 60px; transition: 0.3s; }
-        .sidebar a { padding: 15px; text-decoration: none; font-size: 18px; color: white; display: block; }
-        .sidebar a:hover { background: #575d63; }
-        .menu-toggle { font-size: 24px; cursor: pointer; color: black; margin: 10px; }
-        .content { margin-left: 30px; transition: 0.3s; }
-        .table th, .table td { text-align: center; }
-    </style>
+    <link rel="stylesheet" href="~/css/styles.css">
 </head>
 <body>
 
-    <!-- Hamburger Menu -->
+    <!-- Header with Logo -->
+    <header class="dashboard-header">
+        <img src="~/images/Logo.jpg" alt="Company Logo" class="logo">
+        <h1>Employee Dashboard</h1>
+    </header>
+
+    <!-- Sidebar -->
     <div class="menu-toggle" onclick="toggleMenu()">☰ Menu</div>
     <div class="sidebar">
         <a href="@Url.Action("Completed", "Dashboard", new { empNo = Model?.Employee?.EmpNo })">Completed Trainings</a>
         <a href="@Url.Action("NotCompleted", "Dashboard", new { empNo = Model?.Employee?.EmpNo })">Not Completed Trainings</a>
     </div>
 
-
+    <!-- Dashboard Content -->
     <div class="container content">
         <h2>Employee Dashboard</h2>
 
@@ -64,7 +62,7 @@
                     @foreach (var training in Model.CompletedTrainings)
                     {
                         <tr>
-                            <td>@training.CompletedTraining</td> <!-- Updated -->
+                            <td>@training.CompletedTraining</td>
                             <td>@training.FromDate.ToShortDateString()</td>
                             <td>@training.ToDate.ToShortDateString()</td>
                         </tr>
@@ -84,12 +82,10 @@
                     @foreach (var training in Model.NotCompletedTrainings)
                     {
                         <tr>
-                            <td>@training.Code</td> <!-- Since Code is the Foreign Key -->
+                            <td>@training.Code</td>
                             <td>@(training.Training != null ? training.Training.FromDate.ToShortDateString() : "N/A")</td>
                             <td>@(training.Training != null ? training.Training.ToDate.ToShortDateString() : "N/A")</td>
-
                         </tr>
-
                     }
                 </table>
             </div>

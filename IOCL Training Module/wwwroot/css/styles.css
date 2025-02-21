@@ -1,0 +1,72 @@
+﻿/* Full Background */
+body {
+    /*    background-color: lightpink;*/
+    background-image: url("/images/background.jpg");
+    height: 100vh;
+    width: 100vw;
+    background-size:100% 100%;
+    font-family: Arial, sans-serif;
+}
+
+/* Header Styling */
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    background: rgba(0, 0, 0, 0.6);
+    border-bottom: 2px solid #fff;
+}
+
+/* Logo Styling */
+.logo {
+    width: 130px;
+    height: auto;
+    margin-right: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: -250px;
+    top: 0;
+    background: rgba(0, 0, 0, 0.7);
+    padding-top: 0px;
+    transition: 0.3s;
+}
+
+    .sidebar a {
+        padding: 15px;
+        text-decoration: none;
+        font-size: 18px;
+        color: white;
+        display: block;
+    }
+
+        .sidebar a:hover {
+            background: #575d63;
+        }
+
+/* Menu Toggle */
+.menu-toggle {
+    font-size: 24px;
+    cursor: pointer;
+    color: black;
+    margin: 0px;
+}
+
+/* Dashboard Content */
+.container.content {
+    margin-left: 30px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    width: 80%;
+    margin: auto;
+}
+
+.container{
+    padding:0;
+    margin:0;
+}
