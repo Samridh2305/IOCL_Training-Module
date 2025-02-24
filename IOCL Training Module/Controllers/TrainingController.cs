@@ -49,13 +49,27 @@ namespace IOCL_Training_Module.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, Training training)
+        public async Task<IActionResult> Edit(string id, [Bind("TrainingID,TrainingName,Duration,Venue,Department,Validity,FromDate,ToDate,FPR,Status,Type,SafetyTraining,FacultyName")] Training training)
         {
             if (id != training.TrainingID) return NotFound();
             if (ModelState.IsValid)
             {
-                _context.Update(training);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Update(training);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Trainings.Any(e => e.TrainingID == id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(training);

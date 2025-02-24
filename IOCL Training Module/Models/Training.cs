@@ -35,5 +35,24 @@ namespace IOCL_Training_Module.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime ToDate { get; set; }
+        [Required]
+        [StringLength(100)]
+        public required string FPR { get; set; } 
+
+        [Required]
+        [StringLength(50)]
+        public required string Status { get; set; } 
+
+        [Required]
+        [StringLength(50)]
+        public required string Type { get; set; } 
+
+        [Required]
+        [StringLength(3)]
+        [RegularExpression("Yes|No", ErrorMessage = "SafetyTraining must be either 'Yes' or 'No'")]
+        public required string SafetyTraining { get; set; } 
+
+        [StringLength(150)]
+        public string? FacultyName { get; set; }
     }
 }
