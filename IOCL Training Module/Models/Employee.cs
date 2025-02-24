@@ -36,5 +36,10 @@ namespace IOCL_Training_Module.Models
 
         [StringLength(50)]
         public string? ControllingEmp { get; set; }  // Nullable, since it can be null
+
+        // 🔹 Add Password Field
+        [Required]
+        [StringLength(255)]
+        public required string Password { get; set; }  // Password for login
     }
 }

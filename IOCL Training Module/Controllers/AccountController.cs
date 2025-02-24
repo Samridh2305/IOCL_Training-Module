@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using IOCL_Training_Module.Data; // Assuming this is your DbContext namespace
-using IOCL_Training_Module.Models; // Assuming this is where your Employee model is
+using IOCL_Training_Module.Data; // Database context
+using IOCL_Training_Module.Models; // Employee model
+using Microsoft.AspNetCore.Http; // For session handling
+using System.Linq; // For LINQ queries
 
 public class AccountController : Controller
 {
@@ -17,19 +19,27 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public IActionResult Login(string EmpNo)
+    public IActionResult Login(string EmpNo, string Password)
     {
         var employee = _context.Employees.FirstOrDefault(e => e.EmpNo == EmpNo);
 
         if (employee != null)
         {
-            
-            HttpContext.Session.SetString("EmpNo", EmpNo);
-
-            return RedirectToAction("Index", "Dashboard", new { empNo = EmpNo });
+            if (employee.Password == Password) // Plaintext check (Consider Hashing)
+            {
+                HttpContext.Session.SetString("EmpNo", EmpNo);
+                return RedirectToAction("Index", "Dashboard", new { empNo = EmpNo });
+            }
+            else
+            {
+                ViewBag.Error = "Invalid Password. Please try again.";
+            }
+        }
+        else
+        {
+            ViewBag.Error = "Invalid Employee Number. Please try again.";
         }
 
-        ViewBag.Error = "Invalid Employee Number. Please try again.";
         return View();
     }
 }
