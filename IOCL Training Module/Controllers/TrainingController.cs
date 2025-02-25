@@ -2,7 +2,10 @@
 using IOCL_Training_Module.Data;
 using IOCL_Training_Module.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IOCL_Training_Module.Controllers
 {
@@ -15,9 +18,36 @@ namespace IOCL_Training_Module.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        // Modified Index to include filtering
+        public async Task<IActionResult> Index(string trainingName, string venue, DateTime? fromDate, DateTime? toDate, string type)
         {
-            return View(await _context.Trainings.ToListAsync());
+            var trainings = _context.Trainings.AsQueryable();
+
+            if (!string.IsNullOrEmpty(trainingName))
+                trainings = trainings.Where(t => t.TrainingName.Contains(trainingName));
+
+            if (!string.IsNullOrEmpty(venue))
+                trainings = trainings.Where(t => t.Venue.Contains(venue));
+
+            if (fromDate.HasValue)
+                trainings = trainings.Where(t => t.FromDate >= fromDate.Value);
+
+            if (toDate.HasValue)
+                trainings = trainings.Where(t => t.ToDate <= toDate.Value);
+
+            if (!string.IsNullOrEmpty(type))
+                trainings = trainings.Where(t => t.Type == type);
+
+            // Create a list of select options
+            ViewBag.TrainingTypes = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "-- Select Type --" },
+        new SelectListItem { Value = "General Awareness", Text = "General Awareness" },
+        new SelectListItem { Value = "Functional", Text = "Functional" },
+        new SelectListItem { Value = "Developmental", Text = "Developmental" }
+    };
+
+            return View(await trainings.ToListAsync());
         }
 
         public async Task<IActionResult> Details(string id)
