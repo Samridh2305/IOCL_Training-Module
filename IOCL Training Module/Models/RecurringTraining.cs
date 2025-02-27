@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IOCL_Training_Module.Models
 {
-    [Table("RecurringTraining")] // Explicitly map to existing table
+    [Table("RecurringTraining")] 
     public class RecurringTraining
     {
         [Key]
-        public int SrNo { get; set; }  // Primary Key (Assumed Auto-Increment in SQL Server)
+        public int SrNo { get; set; }  // Primary Key (Auto-Increment)
 
         [Required]
         public required string EmpNo { get; set; }  // Foreign Key - Employee (NOT NULL)
@@ -21,6 +21,8 @@ namespace IOCL_Training_Module.Models
 
         [Required]
         public required DateTime ToDate { get; set; }  // Training End Date (NOT NULL)
+
+        public DateTime NextTrainingDate { get; set; }  // Calculated Next Training Date
 
         // Navigation Properties (Nullable to avoid runtime errors)
         [ForeignKey("EmpNo")]
