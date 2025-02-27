@@ -11,6 +11,7 @@ namespace IOCL_Training_Module.Models
 
         [Required]
         [ForeignKey("Employee")]
+        [StringLength(50)]
         public required string EmpNo { get; set; }  // Foreign Key - Employee
 
         public Employee? Employee { get; set; }  // Navigation Property

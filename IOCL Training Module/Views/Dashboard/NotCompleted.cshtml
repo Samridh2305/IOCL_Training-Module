@@ -2,10 +2,12 @@
 
 @{
     ViewData["Title"] = "Not Completed Trainings";
+    string selectedEmpNo = ViewBag.SelectedEmpNo as string ?? "Unknown";
 }
 
 <div class="container mt-4">
     <h2>Not Completed Trainings</h2>
+    <h5>Employee No: @selectedEmpNo</h5>
 
     @if (Model.Any())
     {
@@ -22,7 +24,7 @@
                 {
                     <tr>
                         <td>@training.Code</td>
-                        <td>@training.Training?.TrainingName ?? "N/A"</td>
+                        <td>@training.Training?.TrainingName</td>
                         <td>@training.EmpNo</td>
                     </tr>
                 }
@@ -31,7 +33,7 @@
     }
     else
     {
-        <p>No not completed trainings found.</p>
+        <p>No not completed trainings found for the selected employee.</p>
     }
 
     <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary">Back to Dashboard</a>

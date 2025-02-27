@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IOCL_Training_Module.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250214080521_intial Migration")]
-    partial class intialMigration
+    [Migration("20250227063003_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,7 @@ namespace IOCL_Training_Module.Migrations
 
                     b.Property<string>("EmpNo")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("FromDate")
@@ -84,6 +85,11 @@ namespace IOCL_Training_Module.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<bool>("Reporting")
                         .HasColumnType("bit");

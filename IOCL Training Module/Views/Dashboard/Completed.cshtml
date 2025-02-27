@@ -2,49 +2,41 @@
 
 @{
     ViewData["Title"] = "Completed Trainings";
+    string selectedEmpNo = ViewBag.SelectedEmpNo as string ?? "Unknown";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body>
+<div class="container mt-4">
+    <h2>Completed Trainings</h2>
+    <h5>Employee No: @selectedEmpNo</h5>
 
-    <div class="container mt-4">
-        <h2>Completed Trainings</h2>
-
-        @if (Model != null && Model.Any())
-        {
-            <table class="table table-striped">
-                <thead>
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Training ID</th>
+                    <th>Training Name</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var training in Model)
+                {
                     <tr>
-                        <th>Training ID</th>
-                        <th>From Date</th>
-                        <th>To Date</th>
+                        <td>@training.CompletedTraining</td>
+                        <td>@training.Training?.TrainingName</td>
+                        <td>@training.FromDate.ToShortDateString()</td>
+                        <td>@training.ToDate.ToShortDateString()</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var training in Model)
-                    {
-                        <tr>
-                            <td>@training.CompletedTraining</td>
-                            <td>@training.FromDate.ToShortDateString()</td>
-                            <td>@training.ToDate.ToShortDateString()</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p>No completed trainings found.</p>
-        }
-    </div>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No completed trainings found for the selected employee.</p>
+    }
 
-</body>
-</html>
-
+    <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary">Back to Dashboard</a>
+</div>

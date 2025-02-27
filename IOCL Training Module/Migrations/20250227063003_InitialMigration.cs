@@ -22,7 +22,8 @@ namespace IOCL_Training_Module.Migrations
                     EmpDesignation = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Sex = table.Column<string>(type: "char(1)", nullable: false),
                     Reporting = table.Column<bool>(type: "bit", nullable: false),
-                    ControllingEmp = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
+                    ControllingEmp = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,7 +39,9 @@ namespace IOCL_Training_Module.Migrations
                     Duration = table.Column<int>(type: "int", nullable: false),
                     Venue = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Department = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Validity = table.Column<int>(type: "int", nullable: true)
+                    Validity = table.Column<int>(type: "int", nullable: true),
+                    FromDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ToDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,7 +82,7 @@ namespace IOCL_Training_Module.Migrations
                 {
                     SrNo = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EmpNo = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    EmpNo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CompletedTraining = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     FromDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ToDate = table.Column<DateTime>(type: "datetime2", nullable: false)

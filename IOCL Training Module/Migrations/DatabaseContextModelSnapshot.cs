@@ -36,6 +36,7 @@ namespace IOCL_Training_Module.Migrations
 
                     b.Property<string>("EmpNo")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("FromDate")
@@ -81,6 +82,11 @@ namespace IOCL_Training_Module.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<bool>("Reporting")
                         .HasColumnType("bit");
