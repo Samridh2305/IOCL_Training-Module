@@ -4,6 +4,7 @@ using IOCL_Training_Module.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IOCL_Training_Module.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250224061458_AddNewTrainingFields")]
+    partial class AddNewTrainingFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,6 @@ namespace IOCL_Training_Module.Migrations
 
                     b.Property<string>("EmpNo")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("FromDate")
@@ -169,9 +171,6 @@ namespace IOCL_Training_Module.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("FromDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("NextTrainingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ToDate")

@@ -1,0 +1,19 @@
+﻿@model IOCL_Training_Module.Models.Employee
+
+@{
+    ViewData["Title"] = "Delete Employee";
+}
+
+<h2>Are you sure you want to delete this employee?</h2>
+
+<div>
+    <strong>Emp No:</strong> @Model.EmpNo <br />
+    <strong>Name:</strong> @Model.Name <br />
+    <strong>Department:</strong> @Model.EmpDepartment <br />
+</div>
+
+<form asp-action="DeleteConfirmed">
+    <input type="hidden" asp-for="EmpNo" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

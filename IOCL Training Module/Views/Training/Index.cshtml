@@ -1,0 +1,123 @@
+﻿@model IEnumerable<IOCL_Training_Module.Models.Training>
+
+@{
+    ViewData["Title"] = "Trainings";
+}
+
+<h2>Trainings</h2>
+
+<!-- Hamburger Menu for Upcoming Trainings -->
+<button class="btn btn-secondary" type="button" id="hamburgerMenu">
+    ☰ Upcoming Trainings
+</button>
+<div id="upcomingTrainings" class="collapse">
+    <ul class="list-group mt-2" id="recurringTrainingList">
+        <li class="list-group-item">Loading...</li>
+    </ul>
+</div>
+
+<hr />
+
+<!-- Filter Form -->
+<form method="get">
+    <div class="form-group">
+        <label for="trainingName">Training Name:</label>
+        <input type="text" id="trainingName" name="trainingName" class="form-control" value="@Context.Request.Query["trainingName"]" />
+    </div>
+
+    <div class="form-group">
+        <label for="venue">Venue:</label>
+        <input type="text" id="venue" name="venue" class="form-control" value="@Context.Request.Query["venue"]" />
+    </div>
+
+    <div class="form-group">
+        <label for="fromDate">From Date:</label>
+        <input type="date" id="fromDate" name="fromDate" class="form-control" value="@Context.Request.Query["fromDate"]" />
+    </div>
+
+    <div class="form-group">
+        <label for="toDate">To Date:</label>
+        <input type="date" id="toDate" name="toDate" class="form-control" value="@Context.Request.Query["toDate"]" />
+    </div>
+
+    <div class="form-group">
+        <label for="type">Type:</label>
+        <select id="type" name="type" class="form-control">
+            @if (ViewBag.TrainingTypes != null)
+            {
+                foreach (var item in (List<SelectListItem>)ViewBag.TrainingTypes)
+                {
+                    <option value="@item.Value" selected="@(item.Value == Context.Request.Query["type"] ? "selected" : null)">
+                        @item.Text
+                    </option>
+                }
+            }
+            else
+            {
+                <option value="">-- Select Type --</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Reset</a>
+</form>
+
+<hr />
+
+<!-- Training Table -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Training Name</th>
+            <th>Venue</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TrainingName</td>
+                <td>@item.Venue</td>
+                <td>@item.FromDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.ToDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.Type</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    document.getElementById("hamburgerMenu").addEventListener("click", function () {
+        var menu = document.getElementById("upcomingTrainings");
+        menu.classList.toggle("show");
+
+        if (menu.classList.contains("show")) {
+            fetch('/RecurringTraining/GetRecurringTrainings')  // API call to get data
+                .then(response => response.json())
+                .then(data => {
+                    var list = document.getElementById("recurringTrainingList");
+                    list.innerHTML = ""; // Clear existing items
+
+                    if (data.length > 0) {
+                        data.forEach(training => {
+                            var listItem = document.createElement("li");
+                            listItem.classList.add("list-group-item");
+                            listItem.innerHTML = `<strong>${training.TrainingName}</strong> - ${training.Venue} (From: ${training.NextTrainingDate})`;
+                            list.appendChild(listItem);
+                        });
+                    } else {
+                        list.innerHTML = "<li class='list-group-item'>No upcoming trainings.</li>";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching recurring trainings:", error);
+                    document.getElementById("recurringTrainingList").innerHTML = "<li class='list-group-item text-danger'>Error loading data.</li>";
+                });
+        }
+    });
+</script>
+

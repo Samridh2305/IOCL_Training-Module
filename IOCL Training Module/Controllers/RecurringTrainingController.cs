@@ -2,8 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using IOCL_Training_Module.Data;
 using IOCL_Training_Module.Models;
-using System.Threading.Tasks;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IOCL_Training_Module.Controllers
 {
@@ -35,9 +36,7 @@ namespace IOCL_Training_Module.Controllers
                 .Include(rt => rt.Training)
                 .FirstOrDefaultAsync(m => m.SrNo == id);
 
-            if (recurringTraining == null) return NotFound();
-
-            return View(recurringTraining);
+            return recurringTraining == null ? NotFound() : View(recurringTraining);
         }
 
         // GET: RecurringTraining/Create
@@ -49,15 +48,14 @@ namespace IOCL_Training_Module.Controllers
         // POST: RecurringTraining/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SrNo,EmpNo,Code,NextTrainingDate")] RecurringTraining recurringTraining)
+        public async Task<IActionResult> Create([Bind("SrNo,EmpNo,TrainingID,FromDate,ToDate")] RecurringTraining recurringTraining)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(recurringTraining);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(recurringTraining);
+            if (!ModelState.IsValid) return View(recurringTraining);
+
+            // No need to calculate NextTrainingDate in C# as SQL trigger handles it
+            _context.Add(recurringTraining);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: RecurringTraining/Edit/5
@@ -66,33 +64,29 @@ namespace IOCL_Training_Module.Controllers
             if (id == null) return NotFound();
 
             var recurringTraining = await _context.RecurringTasks.FindAsync(id);
-            if (recurringTraining == null) return NotFound();
-
-            return View(recurringTraining);
+            return recurringTraining == null ? NotFound() : View(recurringTraining);
         }
 
         // POST: RecurringTraining/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SrNo,EmpNo,Code,NextTrainingDate")] RecurringTraining recurringTraining)
+        public async Task<IActionResult> Edit(int id, [Bind("SrNo,EmpNo,TrainingID,FromDate,ToDate")] RecurringTraining recurringTraining)
         {
             if (id != recurringTraining.SrNo) return NotFound();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(recurringTraining);
+
+            try
             {
-                try
-                {
-                    _context.Update(recurringTraining);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RecurringTrainingExists(recurringTraining.SrNo)) return NotFound();
-                    else throw;
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(recurringTraining);
+                await _context.SaveChangesAsync();
             }
-            return View(recurringTraining);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RecurringTrainingExists(recurringTraining.SrNo)) return NotFound();
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: RecurringTraining/Delete/5
@@ -105,9 +99,7 @@ namespace IOCL_Training_Module.Controllers
                 .Include(rt => rt.Training)
                 .FirstOrDefaultAsync(m => m.SrNo == id);
 
-            if (recurringTraining == null) return NotFound();
-
-            return View(recurringTraining);
+            return recurringTraining == null ? NotFound() : View(recurringTraining);
         }
 
         // POST: RecurringTraining/Delete/5
@@ -127,6 +119,30 @@ namespace IOCL_Training_Module.Controllers
         private bool RecurringTrainingExists(int id)
         {
             return _context.RecurringTasks.Any(e => e.SrNo == id);
+        }
+
+        // API to Fetch Upcoming Recurring Trainings in JSON Format
+        [HttpGet]
+        public async Task<IActionResult> GetRecurringTrainings()
+        {
+            var recurringTrainings = await _context.RecurringTasks
+                .Include(rt => rt.Employee)
+                .Include(rt => rt.Training)
+                .ToListAsync();
+
+            if (!recurringTrainings.Any())
+                return Json(new { message = "No recurring trainings found in the database." });
+
+            var result = recurringTrainings
+                .Where(rt => rt.NextTrainingDate >= DateTime.Today)
+                .Select(rt => new
+                {
+                    TrainingName = rt.Training?.TrainingName ?? "Unknown Training",
+                    Venue = rt.Training?.Venue ?? "Unknown Venue",
+                    NextTrainingDate = rt.NextTrainingDate != default ? rt.NextTrainingDate.ToString("yyyy-MM-dd") : "Not Scheduled"
+                }).ToList();
+
+            return result.Any() ? Json(result) : Json(new { message = "No upcoming trainings found." });
         }
     }
 }
