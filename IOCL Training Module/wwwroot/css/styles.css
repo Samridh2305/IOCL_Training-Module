@@ -1,72 +1,49 @@
-﻿/* Full Background */
+﻿/* General Page Styling */
 body {
-    /*    background-color: lightpink;*/
-    background-image: url("/images/background.jpg");
+    background: linear-gradient(135deg, #004080, #0080FF);
     height: 100vh;
-    width: 100vw;
-    background-size:100% 100%;
-    font-family: Arial, sans-serif;
-}
-
-/* Header Styling */
-.dashboard-header {
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 0px;
-    background: rgba(0, 0, 0, 0.6);
-    border-bottom: 2px solid #fff;
 }
 
-/* Logo Styling */
-.logo {
-    width: 130px;
-    height: auto;
-    margin-right: 20px;
+/* Login Container */
+.login-container {
+    display: flex;
+    width: 900px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Sidebar */
-.sidebar {
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    left: -250px;
-    top: 0;
-    background: rgba(0, 0, 0, 0.7);
-    padding-top: 0px;
-    transition: 0.3s;
+/* Left Section: Login Form */
+.login-form {
+    width: 50%;
+    padding: 40px;
 }
 
-    .sidebar a {
-        padding: 15px;
-        text-decoration: none;
-        font-size: 18px;
-        color: white;
-        display: block;
-    }
-
-        .sidebar a:hover {
-            background: #575d63;
-        }
-
-/* Menu Toggle */
-.menu-toggle {
-    font-size: 24px;
-    cursor: pointer;
-    color: black;
-    margin: 0px;
-}
-
-/* Dashboard Content */
-.container.content {
-    margin-left: 30px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    width: 80%;
+.login-box {
+    max-width: 350px;
     margin: auto;
 }
 
-.container{
-    padding:0;
-    margin:0;
+h2 {
+    font-weight: bold;
+    color: #004080;
 }
+
+/* Right Section: Illustration */
+.login-illustration {
+    width: 50%;
+    background: linear-gradient(135deg, #0059b3, #0099ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+    .login-illustration img {
+        width: 90%;
+        max-width: 300px;
+    }
