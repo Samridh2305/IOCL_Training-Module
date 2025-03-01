@@ -12,7 +12,7 @@
     <strong>Department:</strong> @Model.EmpDepartment <br />
 </div>
 
-<form asp-action="DeleteConfirmed">
+<form asp-action="Delete">
     <input type="hidden" asp-for="EmpNo" />
     <button type="submit" class="btn btn-danger">Delete</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>

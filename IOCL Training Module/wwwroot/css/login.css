@@ -1,0 +1,120 @@
+﻿/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Ensure autofilled fields retain the glassmorphism effect */
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus,
+.form-control:-webkit-autofill:active {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+    border: none;
+    box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.2) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Ensure normal focus styling */
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.3) !important;
+    outline: none;
+    color: white !important;
+    box-shadow: none;
+}
+
+/* Override Bootstrap default white background */
+.form-control {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border: none;
+}
+
+
+body {
+    /*    background: rgb(2,1,29);
+    background: linear-gradient(90deg, rgba(2,1,29,1) 0%, rgba(79,88,88,1) 54%);*/
+    background: url('/images/refinery.jpg');
+    background-size: cover;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+/* Centered Login Box */
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Glassmorphism Effect */
+.login-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 15px;
+    width: 500px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo/Icon */
+.logo {
+    font-size: 50px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Input Fields */
+.form-control {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+}
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.3);
+        outline: none;
+        color: white;
+        box-shadow: none;
+    }
+
+/* Buttons */
+.btn-primary {
+    background: #ff4b5c;
+    border: none;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 25px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+    .btn-primary:hover {
+        background: #ff6b7a;
+    }
+
+.logo img {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    margin-bottom: 15px;
+}
+
+
+/* Links */
+a {
+    color: #ddd;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #ff4b5c;
+    }
