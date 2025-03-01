@@ -4,9 +4,9 @@
     ViewData["Title"] = "Create Employee";
 }
 
-<h2>Create Employee</h2>
+<form class="create-employee-form" asp-action="Create">
+    <h2>Create Employee</h2>
 
-<form asp-action="Create">
     <div class="form-group">
         <label asp-for="EmpNo"></label>
         <input asp-for="EmpNo" class="form-control" required />
