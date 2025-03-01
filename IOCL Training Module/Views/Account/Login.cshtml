@@ -9,34 +9,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <h2 class="text-center">Employee Login</h2>
+    <div class="container">
+        <div class="login-box">
+            <div class="logo">
+                <img src="~/images/IOCL Logo high res.png" alt="IOCL Logo">
+            </div>
+            <h2>Employee Login</h2>
 
-                @if (ViewBag.Error != null)
-                {
-                    <div class="alert alert-danger">@ViewBag.Error</div>
-                }
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
 
-                <form asp-controller="Account" asp-action="Login" method="post">
-                    <div class="mb-3">
-                        <label class="form-label">Employee Number</label>
-                        <input type="text" class="form-control" name="EmpNo" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" class="form-control" name="Password" required />
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
-                </form>
-
-                <div class="text-center mt-3">
-                    <a href="@Url.Action("ForgotPassword", "Account")" class="text-decoration-none">Forgot Password?</a>
+            <form asp-controller="Account" asp-action="Login" method="post">
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="EmpNo" placeholder="Employee Number" required />
                 </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" name="Password" placeholder="Password" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
 
+            <div class="text-center mt-3">
+                <a href="@Url.Action("ForgotPassword", "Account")">Forgot Password?</a>
             </div>
         </div>
     </div>

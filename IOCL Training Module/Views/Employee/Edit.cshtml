@@ -6,7 +6,7 @@
 
 <h2>Edit Employee</h2>
 
-<form asp-action="Edit">
+<form asp-action="Edit" asp-route-id="@Model.EmpNo">
     <input type="hidden" asp-for="EmpNo" />
 
     <div class="form-group">
