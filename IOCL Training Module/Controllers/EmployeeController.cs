@@ -78,7 +78,6 @@ namespace IOCL_Training_Module.Controllers
                 _context.Employees.Remove(employee);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
-        }
+            return RedirectToAction(nameof(Index));        }
     }
 }
