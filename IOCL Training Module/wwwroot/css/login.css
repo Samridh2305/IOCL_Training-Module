@@ -1,11 +1,8 @@
-﻿/* General Reset */
-* {
+﻿* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
-/* Ensure autofilled fields retain the glassmorphism effect */
 .form-control:-webkit-autofill,
 .form-control:-webkit-autofill:hover,
 .form-control:-webkit-autofill:focus,
@@ -35,8 +32,6 @@
 
 
 body {
-    /*    background: rgb(2,1,29);
-    background: linear-gradient(90deg, rgba(2,1,29,1) 0%, rgba(79,88,88,1) 54%);*/
     background: url('/images/refinery.jpg');
     background-size: cover;
     font-family: 'Poppins', sans-serif;

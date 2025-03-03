@@ -51,6 +51,13 @@ public class AccountController : Controller
         return View();
     }
 
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear(); // Clears session data
+        return RedirectToAction("Login", "Account"); // Redirects to login page
+    }
+
+
     // POST: Reset Password
     [HttpPost]
     public async Task<IActionResult> ForgotPassword(string EmpNo, string NewPassword, string ConfirmPassword)
