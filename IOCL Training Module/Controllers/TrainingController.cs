@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IOCL_Training_Module.Controllers
 {
+    [Route("Training")]
     public class TrainingController : Controller
     {
         private readonly DatabaseContext _context;
@@ -18,7 +19,8 @@ namespace IOCL_Training_Module.Controllers
             _context = context;
         }
 
-        // Modified Index to include filtering
+        // Index (List all trainings)
+        [HttpGet("")]
         public async Task<IActionResult> Index(string trainingName, string venue, DateTime? fromDate, DateTime? toDate, string type)
         {
             var trainings = _context.Trainings.AsQueryable();
@@ -38,18 +40,19 @@ namespace IOCL_Training_Module.Controllers
             if (!string.IsNullOrEmpty(type))
                 trainings = trainings.Where(t => t.Type == type);
 
-            // Create a list of select options
             ViewBag.TrainingTypes = new List<SelectListItem>
-    {
-        new SelectListItem { Value = "", Text = "-- Select Type --" },
-        new SelectListItem { Value = "General Awareness", Text = "General Awareness" },
-        new SelectListItem { Value = "Functional", Text = "Functional" },
-        new SelectListItem { Value = "Developmental", Text = "Developmental" }
-    };
+            {
+                new SelectListItem { Value = "", Text = "-- Select Type --" },
+                new SelectListItem { Value = "General Awareness", Text = "General Awareness" },
+                new SelectListItem { Value = "Functional", Text = "Functional" },
+                new SelectListItem { Value = "Developmental", Text = "Developmental" }
+            };
 
             return View(await trainings.ToListAsync());
         }
 
+        // Training details
+        [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(string id)
         {
             var training = await _context.Trainings.FindAsync(id);
@@ -57,9 +60,30 @@ namespace IOCL_Training_Module.Controllers
             return View(training);
         }
 
+        // Training statistics (JSON response)
+        [HttpGet("TrainingStatistics")]
+        public async Task<IActionResult> TrainingStatistics()
+        {
+            var generalAwarenessCount = await _context.Trainings.CountAsync(t => t.Type == "General Awareness");
+            var functionalCount = await _context.Trainings.CountAsync(t => t.Type == "Functional");
+            var developmentalCount = await _context.Trainings.CountAsync(t => t.Type == "Developmental");
+
+            var data = new
+            {
+                GeneralAwareness = generalAwarenessCount,
+                Functional = functionalCount,
+                Developmental = developmentalCount
+            };
+
+            return Json(data);
+        }
+
+        // Create Training - Show form
+        [HttpGet("Create")]
         public IActionResult Create() => View();
 
-        [HttpPost]
+        // Create Training - Submit form
+        [HttpPost("Create")]
         public async Task<IActionResult> Create(Training training)
         {
             if (ModelState.IsValid)
@@ -71,6 +95,8 @@ namespace IOCL_Training_Module.Controllers
             return View(training);
         }
 
+        // Edit Training - Show form
+        [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(string id)
         {
             var training = await _context.Trainings.FindAsync(id);
@@ -78,7 +104,8 @@ namespace IOCL_Training_Module.Controllers
             return View(training);
         }
 
-        [HttpPost]
+        // Edit Training - Submit form
+        [HttpPost("Edit/{id}")]
         public async Task<IActionResult> Edit(string id, [Bind("TrainingID,TrainingName,Duration,Venue,Department,Validity,FromDate,ToDate,FPR,Status,Type,SafetyTraining,FacultyName")] Training training)
         {
             if (id != training.TrainingID) return NotFound();
@@ -105,6 +132,8 @@ namespace IOCL_Training_Module.Controllers
             return View(training);
         }
 
+        // Delete Training - Show confirmation page
+        [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             var training = await _context.Trainings.FindAsync(id);
@@ -112,7 +141,8 @@ namespace IOCL_Training_Module.Controllers
             return View(training);
         }
 
-        [HttpPost, ActionName("Delete")]
+        // Delete Training - Confirm delete
+        [HttpPost("DeleteConfirmed/{id}")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var training = await _context.Trainings.FindAsync(id);

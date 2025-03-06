@@ -21,6 +21,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 // Add MVC and Razor Pages
+builder.Services.AddControllers();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
@@ -39,9 +40,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseSession(); // Enable session middleware
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Register controllers for API endpoints
+app.MapControllers();  // ⬅ Add this line
 
 // Set default route to Login page
 app.MapControllerRoute(
@@ -51,3 +55,4 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+

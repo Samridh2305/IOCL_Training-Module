@@ -11,59 +11,97 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .sidebar { width: 250px; height: 100vh; position: fixed; left: -250px; top: 0; background: #343a40; padding-top: 60px; transition: 0.3s; }
-        .sidebar a { padding: 15px; text-decoration: none; font-size: 18px; color: white; display: block; }
-        .sidebar a:hover { background: #575d63; }
-        .menu-toggle { font-size: 24px; cursor: pointer; color: black; margin: 10px; }
-        .content { margin-left: 30px; transition: 0.3s; }
-        .table th, .table td { text-align: center; }
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: -250px;
+            top: 0;
+            background: #343a40;
+            padding-top: 60px;
+            transition: 0.3s;
+        }
+
+            .sidebar a {
+                padding: 15px;
+                text-decoration: none;
+                font-size: 18px;
+                color: white;
+                display: block;
+            }
+
+                .sidebar a:hover {
+                    background: #575d63;
+                }
+
+        .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            margin: 10px;
+        }
+
+        .content {
+            margin-left: 30px;
+            transition: 0.3s;
+        }
+
+        .table th, .table td {
+            text-align: center;
+        }
+
+        .chart-container {
+            width: 100% !important;
+            max-width: 400px;
+            height: 250px;
+            margin: auto;
+            position: relative;
+        }
+
+        #percentageContainer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+
     </style>
 </head>
 <body>
-
-    <!-- Sidebar Navigation -->
     <div class="menu-toggle" onclick="toggleMenu()">☰ Menu</div>
     <div class="sidebar">
-        <a href="@Url.Action("Completed", "Dashboard", new { selectedEmpNo = Model?.Employee?.EmpNo })" class="btn btn-success">
-            Completed Trainings
-        </a>
-
-        <a href="@Url.Action("NotCompleted", "Dashboard", new { selectedEmpNo = Model?.Employee?.EmpNo })" class="btn btn-warning">
-           Not Completed Trainings
-        </a>
-
+        <a href="@Url.Action("Completed", "Dashboard", new { selectedEmpNo = Model?.Employee?.EmpNo })" class="btn btn-success">Completed Trainings</a>
+        <a href="@Url.Action("NotCompleted", "Dashboard", new { selectedEmpNo = Model?.Employee?.EmpNo })" class="btn btn-warning">Not Completed Trainings</a>
     </div>
 
     <div class="container content">
         <h2>Employee Dashboard</h2>
-
-        <!-- Employee Selection Form -->
         <form method="get">
             <label for="selectedEmpNo">Select Employee:</label>
             <select id="selectedEmpNo" name="selectedEmpNo" class="form-control" required onchange="this.form.submit()">
                 <option value="">-- Select Employee --</option>
-
-                @if (Model?.LoggedInEmployee != null) 
+                @if (Model?.LoggedInEmployee != null)
                 {
-                    <option value="@Model.LoggedInEmployee.EmpNo" selected="@(Model.Employee?.EmpNo == Model.LoggedInEmployee.EmpNo ? "selected" : null)">
-                        @Model.LoggedInEmployee.EmpNo - @Model.LoggedInEmployee.Name (You)
-                    </option>
+                    <option value="@Model.LoggedInEmployee.EmpNo" selected="@(Model.Employee?.EmpNo == Model.LoggedInEmployee.EmpNo ? "selected" : null)">@Model.LoggedInEmployee.EmpNo - @Model.LoggedInEmployee.Name (You)</option>
                 }
-
                 @if (Model?.ReportingEmployees != null && Model.ReportingEmployees.Any())
                 {
                     foreach (var emp in Model.ReportingEmployees)
                     {
-                        <option value="@emp?.EmpNo" selected="@(Model.Employee?.EmpNo == emp?.EmpNo ? "selected" : null)">
-                            @(emp?.EmpNo ?? "N/A") - @(emp?.Name ?? "Unknown")
-                        </option>
+                        <option value="@emp?.EmpNo" selected="@(Model.Employee?.EmpNo == emp?.EmpNo ? "selected" : null)">@emp?.EmpNo - @emp?.Name</option>
                     }
                 }
             </select>
         </form>
-
         <div class="employee-info" id="employeeInfo">
             <h3>Employee Details</h3>
             <table class="table table-bordered">
@@ -77,75 +115,114 @@
             </table>
         </div>
 
-        <!-- Completed Trainings -->
-        <div class="training-section" id="completed">
-            <h3>Completed Trainings</h3>
-            <table class="table table-striped">
-                <tr>
-                    <th>Training ID</th>
-                    <th>From Date</th>
-                    <th>To Date</th>
-                </tr>
-                @if (Model?.CompletedTrainings != null && Model.CompletedTrainings.Any())
-                {
-                    foreach (var training in Model.CompletedTrainings)
-                    {
-                        <tr>
-                            <td>@training.CompletedTraining</td>
-                            <td>@training.FromDate.ToShortDateString()</td>
-                            <td>@training.ToDate.ToShortDateString()</td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr><td colspan="3">No completed trainings.</td></tr>
-                }
-            </table>
+        <div class="training-section" id="trainingCompletionRate">
+            <h3>Training Completion Rate</h3>
+            <div class="chart-container">
+                <canvas id="gaugeChart"></canvas>
+                <div id="gaugePercentage"></div>
+            </div>
         </div>
 
-        <!-- Not Completed Trainings -->
-        <div class="training-section" id="notCompleted">
-            <h3>Not Completed Trainings</h3>
-            <table class="table table-striped">
-                <tr>
-                    <th>Training ID</th>
-                    <th>From Date</th>
-                    <th>To Date</th>
-                </tr>
-                @if (Model?.NotCompletedTrainings != null && Model.NotCompletedTrainings.Any())
-                {
-                    foreach (var training in Model.NotCompletedTrainings)
-                    {
-                        <tr>
-                            <td>@training.Code</td>
-                            <td>@(training.Training?.FromDate.ToShortDateString() ?? "N/A")</td>
-                            <td>@(training.Training?.ToDate.ToShortDateString() ?? "N/A")</td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr><td colspan="3">No pending trainings.</td></tr>
-                }
-            </table>
+        <!-- Training Statistics Chart -->
+        <div class="training-section mt-4">
+            <h3>Training Statistics</h3>
+            <div class="chart-container">
+                <canvas id="trainingChart"></canvas>
+            </div>
         </div>
     </div>
 
+    @{
+        var completedTrainings = Model?.CompletedTrainings?.Count() ?? 0;
+        var notCompletedTrainings = Model?.NotCompletedTrainings?.Count() ?? 0;
+        var totalTrainings = completedTrainings + notCompletedTrainings;
+        var completedPercentage = totalTrainings > 0 ? (completedTrainings * 100) / totalTrainings : 0;
+    }
     <script>
         function toggleMenu() {
             let sidebar = document.querySelector(".sidebar");
             sidebar.style.left = (sidebar.style.left === "0px") ? "-250px" : "0px";
         }
 
-        // Show employee info and training tables only if an employee is selected
         document.addEventListener("DOMContentLoaded", function () {
-            var selectedEmpNo = document.getElementById("selectedEmpNo").value;
+            console.log("Page Loaded - Initializing Charts");
 
-            if (selectedEmpNo) {
-                document.getElementById("employeeInfo").style.display = "block";
-                document.querySelectorAll(".training-section").forEach(el => el.style.display = "block");
+            // Training Completion Gauge Chart
+            var ctx = document.getElementById('gaugeChart')?.getContext('2d');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [@completedTrainings, @notCompletedTrainings],
+                            backgroundColor: ['#28a745', '#dc3545']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '75%',
+                        rotation: -Math.PI,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        }
+                    }
+                });
+                document.getElementById("gaugePercentage").innerText = '@completedPercentage%';
+            } else {
+                console.error("Canvas 'gaugeChart' not found");
             }
+
+            // Training Statistics Bar Chart
+            const trainingChartElement = document.getElementById('trainingChart');
+            if (!trainingChartElement) {
+                console.error("Canvas 'trainingChart' not found.");
+                return;
+            }
+
+            fetch("https://localhost:7161/Training/TrainingStatistics")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Received Training Statistics Data: ", data);
+
+                            let general = Number(data.generalAwareness) || 0;
+                            let functional = Number(data.functional) || 0;
+                            let developmental = Number(data.developmental) || 0;
+
+                    const ctxBar = trainingChartElement.getContext('2d');
+                    new Chart(ctxBar, {
+                        type: 'bar',
+                        data: {
+                            labels: ['General Awareness', 'Functional', 'Developmental'],
+                            datasets: [{
+                                label: 'Number of Trainings',
+                                data: [general, functional, developmental],
+                                backgroundColor: ['#4CAF50', '#FF9800', '#2196F3'],
+                                borderWidth: 1,
+                                barThickness: 30,  
+                                maxBarThickness: 30
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching training statistics:", error);
+                    alert("Failed to load training statistics. Check console for details.");
+                });
         });
     </script>
 
