@@ -17,36 +17,6 @@
             font-family: Arial, sans-serif;
         }
 
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            position: fixed;
-            left: -250px;
-            top: 0;
-            background: #343a40;
-            padding-top: 60px;
-            transition: 0.3s;
-        }
-
-            .sidebar a {
-                padding: 15px;
-                text-decoration: none;
-                font-size: 18px;
-                color: white;
-                display: block;
-            }
-
-                .sidebar a:hover {
-                    background: #575d63;
-                }
-
-        .menu-toggle {
-            font-size: 24px;
-            cursor: pointer;
-            color: black;
-            margin: 10px;
-        }
-
         .content {
             margin-left: 30px;
             transition: 0.3s;
@@ -73,16 +43,9 @@
             font-weight: bold;
             color: #333;
         }
-
     </style>
 </head>
 <body>
-    <div class="menu-toggle" onclick="toggleMenu()">☰ Menu</div>
-    <div class="sidebar">
-        <a href="@Url.Action("Completed", "Dashboard", new { selectedEmpNo = Model?.Employee?.EmpNo })" class="btn btn-success">Completed Trainings</a>
-        <a href="@Url.Action("NotCompleted", "Dashboard", new { selectedEmpNo = Model?.Employee?.EmpNo })" class="btn btn-warning">Not Completed Trainings</a>
-    </div>
-
     <div class="container content">
         <h2>Employee Dashboard</h2>
         <form method="get">
@@ -139,11 +102,6 @@
         var completedPercentage = totalTrainings > 0 ? (completedTrainings * 100) / totalTrainings : 0;
     }
     <script>
-        function toggleMenu() {
-            let sidebar = document.querySelector(".sidebar");
-            sidebar.style.left = (sidebar.style.left === "0px") ? "-250px" : "0px";
-        }
-
         document.addEventListener("DOMContentLoaded", function () {
             console.log("Page Loaded - Initializing Charts");
 
@@ -191,9 +149,9 @@
                 .then(data => {
                     console.log("Received Training Statistics Data: ", data);
 
-                            let general = Number(data.generalAwareness) || 0;
-                            let functional = Number(data.functional) || 0;
-                            let developmental = Number(data.developmental) || 0;
+                    let general = Number(data.generalAwareness) || 0;
+                    let functional = Number(data.functional) || 0;
+                    let developmental = Number(data.developmental) || 0;
 
                     const ctxBar = trainingChartElement.getContext('2d');
                     new Chart(ctxBar, {
@@ -205,7 +163,7 @@
                                 data: [general, functional, developmental],
                                 backgroundColor: ['#4CAF50', '#FF9800', '#2196F3'],
                                 borderWidth: 1,
-                                barThickness: 30,  
+                                barThickness: 30,
                                 maxBarThickness: 30
                             }]
                         },
@@ -225,6 +183,5 @@
                 });
         });
     </script>
-
 </body>
 </html>
