@@ -161,31 +161,54 @@
             }
 
             // Training Statistics Bar Chart
-            var ctx2 = document.getElementById('trainingChart')?.getContext('2d');
-            if (ctx2) {
-                new Chart(ctx2, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Completed', 'Not Completed'],
-                        datasets: [{
-                            label: 'Trainings',
-                            data: [@completedTrainings, @notCompletedTrainings],
-                            backgroundColor: ['#5A8E3E', '#333'],
-                            borderColor: ['#5A8E3E', '#333'],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        indexAxis: 'y',
-                        scales: {
-                            x: {
-                                beginAtZero: true,
+            const trainingChartElement = document.getElementById('trainingChart');
+            if (!trainingChartElement) {
+                console.error("Canvas 'trainingChart' not found.");
+                return;
+            }
+
+            fetch("https://localhost:7161/Training/TrainingStatistics")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Received Training Statistics Data: ", data);
+
+                    let general = Number(data.generalAwareness) || 0;
+                    let functional = Number(data.functional) || 0;
+                    let developmental = Number(data.developmental) || 0;
+
+                    const ctxBar = trainingChartElement.getContext('2d');
+                    new Chart(ctxBar, {
+                        type: 'bar',
+                        data: {
+                            labels: ['General Awareness', 'Functional', 'Developmental'],
+                            datasets: [{
+                                label: 'Number of Trainings',
+                                data: [general, functional, developmental],
+                                backgroundColor: ['#4CAF50', '#FF9800', '#2196F3'],
+                                borderWidth: 1,
+                                barThickness: 30,
+                                maxBarThickness: 30
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
                         }
-                    }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching training statistics:", error);
+                    alert("Failed to load training statistics. Check console for details.");
                 });
-            }
         });
     </script>
 </body>
