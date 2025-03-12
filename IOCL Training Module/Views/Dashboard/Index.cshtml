@@ -56,6 +56,7 @@
             border-radius: 10px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             border-left: 5px solid #5A8E3E;
+
         }
     </style>
 </head>
@@ -81,7 +82,6 @@
         </form>
 
         <div class="dashboard-grid">
-            <!-- Employee Details Box -->
             <div class="box">
                 <h3>Employee Details</h3>
                 <table class="table table-bordered">
@@ -94,27 +94,21 @@
                     }
                 </table>
             </div>
-
-            <!-- Doughnut Chart Box -->
             <div class="box">
                 <h3>Training Completion Rate</h3>
                 <div class="chart-container">
                     <canvas id="gaugeChart"></canvas>
-                    <div id="gaugePercentage"></div>
                 </div>
             </div>
         </div>
 
         <div class="dashboard-grid">
-            <!-- Horizontal Bar Chart Box -->
             <div class="box">
                 <h3>Training Statistics</h3>
                 <div class="chart-container">
                     <canvas id="trainingChart"></canvas>
                 </div>
             </div>
-
-            <!-- Empty Box for spacing (if needed) -->
             <div class="box">
                 <h3>Training Completion by Category</h3>
                 <div class="chart-container">
@@ -130,11 +124,11 @@
         var totalTrainings = completedTrainings + notCompletedTrainings;
         var completedPercentage = totalTrainings > 0 ? (completedTrainings * 100) / totalTrainings : 0;
     }
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             console.log("Page Loaded - Initializing Charts");
 
-            // Training Completion Gauge Chart
             var ctx = document.getElementById('gaugeChart')?.getContext('2d');
             if (ctx) {
                 new Chart(ctx, {
@@ -146,84 +140,25 @@
                             backgroundColor: ['#5A8E3E', '#ccc'],
                             hoverBackgroundColor: ['#4e7034', '#b4b4b4'],
                             barThickness: 40,
-                                maxBarThickness: 40
+                            maxBarThickness: 40
                         }]
                     },
                     options: {
                         responsive: true,
-                        cutoutPercentage: 10,
-                        indexAxis: 'y',  // This makes the chart horizontal (key part)
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
                         scales: {
-                        x: {
-                            beginAtZero: true
+                            x: { beginAtZero: true },
+                            y: { beginAtZero: true }
                         },
-                        y: {
-                            beginAtZero: true // Ensure the y-axis starts from zero
-                        }
-                    },
                         plugins: {
-                            tooltip: {
-                                enabled: false
-                            },
-                            legend: {
-                                position: 'top',
-                                display: false
-                            }
+                            tooltip: { enabled: false },
+                            legend: { position: 'top', display: false }
                         }
                     }
                 });
             }
 
-                    // Training Completion Stacked Bar Chart
-        const stackedChartElement = document.getElementById('stackedTrainingChart');
-        if (stackedChartElement) {
-            fetch("https://localhost:7161/Training/TrainingCompletionData")
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Received Training Completion Data: ", data);
-
-                    const ctxStacked = stackedChartElement.getContext('2d');
-                    new Chart(ctxStacked, {
-                        type: 'bar',
-                        data: {
-                            labels: ['General Awareness', 'Functional', 'Developmental'],
-                            datasets: [
-                                {
-                                    label: 'Completed',
-                                    data: [
-                                        data.completed.generalAwareness,
-                                        data.completed.functional,
-                                        data.completed.developmental
-                                    ],
-                                    backgroundColor: '#4CAF50'
-                                },
-                                {
-                                    label: 'Not Completed',
-                                    data: [
-                                        data.notCompleted.generalAwareness,
-                                        data.notCompleted.functional,
-                                        data.notCompleted.developmental
-                                    ],
-                                    backgroundColor: '#FF5252'
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                x: {
-                                    stacked: true
-                                },
-                                y: {
-                                    stacked: true,
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                })
-
-            // Training Statistics Bar Chart
             const trainingChartElement = document.getElementById('trainingChart');
             if (!trainingChartElement) {
                 console.error("Canvas 'trainingChart' not found.");
@@ -239,7 +174,6 @@
                 })
                 .then(data => {
                     console.log("Received Training Statistics Data: ", data);
-
                     let general = Number(data.generalAwareness) || 0;
                     let functional = Number(data.functional) || 0;
                     let developmental = Number(data.developmental) || 0;
@@ -261,9 +195,7 @@
                         options: {
                             responsive: true,
                             scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
+                                y: { beginAtZero: true }
                             }
                         }
                     });
