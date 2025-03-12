@@ -116,7 +116,10 @@
 
             <!-- Empty Box for spacing (if needed) -->
             <div class="box">
-                <!-- This can be used for any additional content if needed -->
+                <h3>Training Completion by Category</h3>
+                <div class="chart-container">
+                    <canvas id="stackedTrainingChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -159,6 +162,55 @@
                     }
                 });
             }
+
+                    // Training Completion Stacked Bar Chart
+        const stackedChartElement = document.getElementById('stackedTrainingChart');
+        if (stackedChartElement) {
+            fetch("https://localhost:7161/Training/TrainingCompletionData")
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Received Training Completion Data: ", data);
+
+                    const ctxStacked = stackedChartElement.getContext('2d');
+                    new Chart(ctxStacked, {
+                        type: 'bar',
+                        data: {
+                            labels: ['General Awareness', 'Functional', 'Developmental'],
+                            datasets: [
+                                {
+                                    label: 'Completed',
+                                    data: [
+                                        data.completed.generalAwareness,
+                                        data.completed.functional,
+                                        data.completed.developmental
+                                    ],
+                                    backgroundColor: '#4CAF50'
+                                },
+                                {
+                                    label: 'Not Completed',
+                                    data: [
+                                        data.notCompleted.generalAwareness,
+                                        data.notCompleted.functional,
+                                        data.notCompleted.developmental
+                                    ],
+                                    backgroundColor: '#FF5252'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true
+                                },
+                                y: {
+                                    stacked: true,
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
 
             // Training Statistics Bar Chart
             const trainingChartElement = document.getElementById('trainingChart');
