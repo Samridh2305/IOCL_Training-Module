@@ -135,18 +135,29 @@
             var ctx = document.getElementById('gaugeChart')?.getContext('2d');
             if (ctx) {
                 new Chart(ctx, {
-                    type: 'doughnut',
+                    type: 'bar',
                     data: {
                         labels: ['Completed', 'Remaining'],
                         datasets: [{
                             data: [@completedPercentage, 100 - @completedPercentage],
                             backgroundColor: ['#5A8E3E', '#ccc'],
                             hoverBackgroundColor: ['#4e7034', '#b4b4b4'],
+                            barThickness: 40,
+                                maxBarThickness: 40
                         }]
                     },
                     options: {
                         responsive: true,
-                        cutoutPercentage: 80,
+                        cutoutPercentage: 10,
+                        indexAxis: 'y',  // This makes the chart horizontal (key part)
+                        scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true // Ensure the y-axis starts from zero
+                        }
+                    },
                         plugins: {
                             tooltip: {
                                 enabled: false
