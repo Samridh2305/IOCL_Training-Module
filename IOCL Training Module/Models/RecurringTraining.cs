@@ -22,7 +22,7 @@ namespace IOCL_Training_Module.Models
         [Required]
         public required DateTime ToDate { get; set; }  // Training End Date (NOT NULL)
 
-        public DateTime NextTrainingDate { get; set; }  // Calculated Next Training Date
+        public DateTime? NextTrainingDate { get; set; }  // Calculated Next Training Date
 
         // Navigation Properties (Nullable to avoid runtime errors)
         [ForeignKey("EmpNo")]

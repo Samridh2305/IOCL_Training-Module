@@ -1,0 +1,115 @@
+﻿@model IOCL_Training_Module.Models.TrainingStatusViewModel
+
+@{
+    ViewData["Title"] = "Training Status of Subordinates";
+}
+
+<div class="container mt-4">
+    <h2>Training Status of Subordinates</h2>
+
+    <!-- Employee Selection Dropdown -->
+    <form method="get" asp-action="Index">
+        <label for="selectedEmpNo">Select Employee:</label>
+        <select name="selectedEmpNo" id="selectedEmpNo" class="form-control" onchange="this.form.submit()">
+            @foreach (var emp in Model.Subordinates)
+            {
+                <option value="@emp.EmpNo" selected="@(emp.EmpNo == Model.SelectedEmpNo ? "selected" : null)">
+                    @emp.EmpNo - @emp.Name
+                </option>
+            }
+        </select>
+    </form>
+
+    <!-- Completed Trainings Section -->
+    <h3 class="mt-3">Completed Trainings</h3>
+    @if (Model.CompletedTrainings.Any())
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Training Code</th>
+                    <th>Training Name</th>
+                    <th>Employee No</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var training in Model.CompletedTrainings)
+                {
+                    <tr>
+                        <td>@training.Training?.TrainingID</td>
+                        <td>@training.Training?.TrainingName</td>
+                        <td>@training.EmpNo</td>
+                        <td>@training.FromDate.ToShortDateString()</td>
+                        <td>@training.ToDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No completed trainings found.</p>
+    }
+
+    <!-- Not Completed Trainings Section -->
+    <h3 class="mt-4">Not Completed Trainings</h3>
+    @if (Model.NotCompletedTrainings.Any())
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Training Code</th>
+                    <th>Training Name</th>
+                    <th>Employee No</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var training in Model.NotCompletedTrainings)
+                {
+                    <tr>
+                        <td>@training.Code</td>
+                        <td>@training.Training?.TrainingName</td>
+                        <td>@training.EmpNo</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No not completed trainings found.</p>
+    }
+
+    <!-- Upcoming Trainings Section -->
+    <h3 class="mt-4">Upcoming Trainings</h3>
+    @if (Model.UpcomingTrainings.Any())
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Training Name</th>
+                    <th>Venue</th>
+                    <th>Next Training Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var training in Model.UpcomingTrainings)
+                {
+                    <tr>
+                        <td>@training.Training?.TrainingName</td>
+                        <td>@training.Training?.Venue</td>
+                        <td>@(training.NextTrainingDate.HasValue ? training.NextTrainingDate.Value.ToShortDateString() : "Not Scheduled")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No upcoming trainings found.</p>
+    }
+
+    <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>

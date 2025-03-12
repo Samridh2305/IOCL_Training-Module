@@ -121,28 +121,33 @@ namespace IOCL_Training_Module.Controllers
             return _context.RecurringTasks.Any(e => e.SrNo == id);
         }
 
-        // API to Fetch Upcoming Recurring Trainings in JSON Format
+        [HttpGet]
         [HttpGet]
         public async Task<IActionResult> GetRecurringTrainings()
         {
             var recurringTrainings = await _context.RecurringTasks
                 .Include(rt => rt.Employee)
                 .Include(rt => rt.Training)
-                .ToListAsync();
+                .ToListAsync();  // Fetch data first
 
             if (!recurringTrainings.Any())
                 return Json(new { message = "No recurring trainings found in the database." });
 
             var result = recurringTrainings
-                .Where(rt => rt.NextTrainingDate >= DateTime.Today)
+                .Where(rt => rt.NextTrainingDate.HasValue && rt.NextTrainingDate.Value >= DateTime.Today)
                 .Select(rt => new
                 {
                     TrainingName = rt.Training?.TrainingName ?? "Unknown Training",
                     Venue = rt.Training?.Venue ?? "Unknown Venue",
-                    NextTrainingDate = rt.NextTrainingDate != default ? rt.NextTrainingDate.ToString("yyyy-MM-dd") : "Not Scheduled"
-                }).ToList();
+                    NextTrainingDate = rt.NextTrainingDate.HasValue
+                        ? rt.NextTrainingDate.Value.ToString("yyyy-MM-dd")
+                        : "Not Scheduled"
+                })
+                .ToList();
 
             return result.Any() ? Json(result) : Json(new { message = "No upcoming trainings found." });
         }
+
+
     }
 }
