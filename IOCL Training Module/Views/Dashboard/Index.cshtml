@@ -89,6 +89,8 @@
                     {
                         <tr><th>Employee No</th><td>@Model.Employee.EmpNo</td></tr>
                         <tr><th>Name</th><td>@Model.Employee.Name</td></tr>
+                        <tr><th>Father's Name</th><td>@Model.Employee.FatherName</td></tr>
+                        <tr><th>Gender</th><td>@Model.Employee.Sex</td></tr>
                         <tr><th>Department</th><td>@Model.Employee.EmpDepartment</td></tr>
                         <tr><th>Designation</th><td>@Model.Employee.EmpDesignation</td></tr>
                     }
@@ -96,7 +98,7 @@
             </div>
             <div class="box">
                 <h3>Training Completion Rate</h3>
-                <div class="chart-container">
+                <div class="chart-container" style="display: flex; align-items: center;">
                     <canvas id="gaugeChart"></canvas>
                 </div>
             </div>
@@ -132,32 +134,91 @@
             var ctx = document.getElementById('gaugeChart')?.getContext('2d');
             if (ctx) {
                 new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Completed', 'Remaining'],
-                        datasets: [{
-                            data: [@completedPercentage, 100 - @completedPercentage],
-                            backgroundColor: ['#5A8E3E', '#ccc'],
-                            hoverBackgroundColor: ['#4e7034', '#b4b4b4'],
-                            barThickness: 40,
-                            maxBarThickness: 40
-                        }]
+                   type: 'pie',
+            data: {
+                labels: ['Completed', 'Remaining'],
+                datasets: [{
+                    data: [@completedPercentage, 100 - @completedPercentage],
+                    backgroundColor: ['#97A1D9', '#111539'],
+                    borderWidth: 1
+                }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        indexAxis: 'y',
-                        scales: {
-                            x: { beginAtZero: true },
-                            y: { beginAtZero: true }
-                        },
-                        plugins: {
-                            tooltip: { enabled: false },
-                            legend: { position: 'top', display: false }
+                     options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                let label = tooltipItem.label || '';
+                                let value = tooltipItem.raw;
+                                return `${label}: ${value}%`;
+                            }
+                        }
+                    },
+                    legend: { display: false }
                         }
                     }
                 });
             }
+
+        const stackedTrainingChartElement = document.getElementById('stackedTrainingChart');
+        if (!stackedTrainingChartElement) {
+            console.error("Canvas 'stackedTrainingChart' not found.");
+            return;
+        }
+
+        fetch("https://localhost:7161/Training/CategoryCompletion")
+            .then(response => response.json())
+            .then(data => {
+                console.log("API Response:", data);
+
+                let categories = Object.keys(data);
+                let completedData = categories.map(category => data[category]?.completed || 0);
+                let pendingData = categories.map(category => data[category]?.pending || 0);
+
+                console.log("Completed Data:", completedData);
+                console.log("Pending Data:", pendingData);
+
+                const ctxStacked = stackedTrainingChartElement.getContext('2d');
+                new Chart(ctxStacked, {
+                    type: 'bar',
+                    data: {
+                        labels: categories,
+                        datasets: [
+                            {
+                                label: 'Completed',
+                                data: completedData,
+                                backgroundColor: '#4A5596',
+                                borderWidth: 1,
+                                barThickness: 30,
+                                maxBarThickness: 30
+                            },
+                            {
+                                label: 'Pending',
+                                data: pendingData,
+                                backgroundColor: '#97A1D9',
+                                borderWidth: 1,
+                                barThickness: 30,
+                                maxBarThickness: 30
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        indexAxis: 'y',
+                        scales: {
+                            x: { stacked: true },
+                            y: { stacked: true, beginAtZero: true }
+                        },
+                        plugins: {
+                            legend: { position: 'top' }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error("Error fetching data:", error));
 
             const trainingChartElement = document.getElementById('trainingChart');
             if (!trainingChartElement) {
@@ -186,7 +247,7 @@
                             datasets: [{
                                 label: 'Number of Trainings',
                                 data: [general, functional, developmental],
-                                backgroundColor: ['#4CAF50', '#FF9800', '#2196F3'],
+                                backgroundColor: ['#97A1D9', '#4A5596', '#2C3365'],
                                 borderWidth: 1,
                                 barThickness: 30,
                                 maxBarThickness: 30

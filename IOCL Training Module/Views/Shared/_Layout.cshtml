@@ -63,6 +63,13 @@
             margin-bottom: 20px;
         }
 
+        .sidebar .iocllogo img {
+            width: 80px; 
+            height: auto; 
+            display: block; 
+            margin: 5px auto; 
+        }
+
         h2 {
             color: #5A8E3E;
             margin-bottom: 15px;
@@ -90,6 +97,9 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
+        <div class="iocllogo">
+            <img src="~/images/IOCL Logo high res.png" alt="IOCL Logo">
+        </div>
         <h3 class="text-center">IOCL</h3>
         <a asp-area="" asp-controller="Dashboard" asp-action="Index">
             <i class="fas fa-th"></i> Dashboard
@@ -100,13 +110,13 @@
         <a asp-area="" asp-controller="Training" asp-action="Index">
             <i class="fas fa-calendar-alt"></i> Training
         </a>
-        <a asp-area="" asp-controller="Dashboard" asp-action="Completed" class="btn btn-success m-2">
+        <a asp-area="" asp-controller="Dashboard" asp-action="Completed">
             Completed Trainings
         </a>
-        <a asp-area="" asp-controller="Dashboard" asp-action="NotCompleted" class="btn btn-warning m-2">
+        <a asp-area="" asp-controller="Dashboard" asp-action="NotCompleted">
             Not Completed Trainings
         </a>
-        <a asp-area="" asp-controller="TrainingStatus" asp-action="Index" class="btn btn-info m-2">
+        <a asp-area="" asp-controller="TrainingStatus" asp-action="Index">
             Training Status Section
         </a>
     </div>

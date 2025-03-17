@@ -78,6 +78,26 @@ namespace IOCL_Training_Module.Controllers
             return Json(data);
         }
 
+        [HttpGet("CategoryCompletion")]
+        public async Task<IActionResult> CategoryCompletion()
+        {
+            var categoryCompletion = await _context.Trainings
+                .GroupBy(t => t.Type)
+                .Select(group => new
+                {
+                    Category = group.Key,
+                    Completed = _context.CompletedTrainings
+                        .Where(ct => ct.Training != null && ct.Training.Type == group.Key)
+                        .Count(),
+                    Pending = _context.NotCompletedTrainings
+                        .Where(nct => nct.Training != null && nct.Training.Type == group.Key)
+                        .Count()
+                })
+                .ToDictionaryAsync(t => t.Category);
+
+            return Json(categoryCompletion);
+        }
+
         // Create Training - Show form
         [HttpGet("Create")]
         public IActionResult Create() => View();
