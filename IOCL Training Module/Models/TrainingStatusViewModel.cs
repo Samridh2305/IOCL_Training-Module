@@ -8,4 +8,4 @@
         public string? SelectedEmpNo { get; set; } // Selected employee number
         public required List<RecurringTraining> UpcomingTrainings { get; set; }
     }
-}
+
