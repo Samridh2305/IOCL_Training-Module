@@ -28,12 +28,12 @@ main {
 
 /* Hero Section */
 .hero {
-    background-image: url('../Images/oil refinery.jpg');
+    background-image: url('../Images/bgimg.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
     color: white;
-    padding: 100px 0;
+    padding: 10px 0;
     text-align: center;
     position: relative;
     width: 100%;
