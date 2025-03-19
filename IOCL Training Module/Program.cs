@@ -47,10 +47,10 @@ app.UseAuthorization();
 // Register controllers for API endpoints
 app.MapControllers();  // ⬅ Add this line
 
-// Set default route to Login page
+// Set default route to Home page
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 
