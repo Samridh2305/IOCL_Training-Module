@@ -1,83 +1,132 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using IOCL_Training_Module.Data;
 using IOCL_Training_Module.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
-namespace IOCL_Training_Module.Controllers
+public class EmployeeController : Controller
 {
-    public class EmployeeController : Controller
+    private readonly DatabaseContext _context;
+
+    public EmployeeController(DatabaseContext context)
     {
-        private readonly DatabaseContext _context;
+        _context = context;
+    }
 
-        public EmployeeController(DatabaseContext context)
+    // Helper method to check if user is admin
+    private bool IsAdmin()
+    {
+        var role = HttpContext.Session.GetString("Role");
+        return role == "Admin";
+    }
+
+    // Index (accessible to all logged-in users)
+    public IActionResult Index()
+    {
+        if (string.IsNullOrEmpty(HttpContext.Session.GetString("EmpNo")))
         {
-            _context = context;
+            return RedirectToAction("Login", "Account");
+        }
+        return View(_context.Employees.ToList());
+    }
+
+    // Create (Admin only)
+    public IActionResult Create()
+    {
+        if (!IsAdmin())
+        {
+            return Unauthorized("Only Admins can create employees.");
+        }
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(Employee employee)
+    {
+        if (!IsAdmin())
+        {
+            return Unauthorized("Only Admins can create employees.");
         }
 
-        public async Task<IActionResult> Index()
+        if (ModelState.IsValid)
         {
-            return View(await _context.Employees.ToListAsync());
+            _context.Employees.Add(employee);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        return View(employee);
+    }
+
+    // Edit (Admin only)
+    public IActionResult Edit(string id)
+    {
+        if (!IsAdmin())
+        {
+            return Unauthorized("Only Admins can edit employees.");
         }
 
-        public async Task<IActionResult> Details(string id)
+        var employee = _context.Employees.Find(id);
+        if (employee == null)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null) return NotFound();
-            return View(employee);
+            return NotFound();
+        }
+        return View(employee);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(string id, Employee employee)
+    {
+        if (!IsAdmin())
+        {
+            return Unauthorized("Only Admins can edit employees.");
         }
 
-        public IActionResult Create() => View();
-
-        [HttpPost]
-        public async Task<IActionResult> Create(Employee employee)
+        if (id != employee.EmpNo)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(employee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(employee);
+            return BadRequest();
         }
 
-        public async Task<IActionResult> Edit(string id)
+        if (ModelState.IsValid)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null) return NotFound();
-            return View(employee);
+            _context.Update(employee);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        return View(employee);
+    }
+
+    // Delete (Admin only)
+    public IActionResult Delete(string id)
+    {
+        if (!IsAdmin())
+        {
+            return Unauthorized("Only Admins can delete employees.");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Edit(string id, Employee employee)
+        var employee = _context.Employees.Find(id);
+        if (employee == null)
         {
-            if (id != employee.EmpNo) return NotFound();
-            if (ModelState.IsValid)
-            {
-                _context.Update(employee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(employee);
+            return NotFound();
+        }
+        return View(employee);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(string EmpNo)
+    {
+        if (!IsAdmin())
+        {
+            return Unauthorized("Only Admins can delete employees.");
         }
 
-        public async Task<IActionResult> Delete(string id)
+        var employee = _context.Employees.Find(EmpNo);
+        if (employee != null)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null) return NotFound();
-            return View(employee);
+            _context.Employees.Remove(employee);
+            _context.SaveChanges();
         }
-
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee != null)
-            {
-                _context.Employees.Remove(employee);
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Index));        }
+        return RedirectToAction("Index");
     }
 }
