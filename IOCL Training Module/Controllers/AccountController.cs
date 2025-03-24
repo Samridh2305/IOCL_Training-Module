@@ -29,7 +29,7 @@ public class AccountController : Controller
             if (employee.Password == Password) // Directly compare stored password
             {
                 HttpContext.Session.SetString("EmpNo", EmpNo);
-                return RedirectToAction("Index", "Dashboard", new { empNo = EmpNo });
+                return RedirectToAction("Index", "Home");
             }
             else
             {

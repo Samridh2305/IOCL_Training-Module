@@ -3,113 +3,203 @@
     padding: 0;
     box-sizing: border-box;
 }
-.form-control:-webkit-autofill,
-.form-control:-webkit-autofill:hover,
-.form-control:-webkit-autofill:focus,
-.form-control:-webkit-autofill:active {
-    background: rgba(255, 255, 255, 0.2) !important;
-    color: white !important;
-    -webkit-text-fill-color: white !important;
-    border: none;
-    box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.2) inset !important;
-    transition: background-color 5000s ease-in-out 0s;
-}
-
-/* Ensure normal focus styling */
-.form-control:focus {
-    background: rgba(255, 255, 255, 0.3) !important;
-    outline: none;
-    color: white !important;
-    box-shadow: none;
-}
-
-/* Override Bootstrap default white background */
-.form-control {
-    background: rgba(255, 255, 255, 0.2) !important;
-    color: white !important;
-    border: none;
-}
-
 
 body {
-    background: url('/images/refinery.jpg');
-    background-size: cover;
+    background: #f0f0f0; /* Light gray  */
     font-family: 'Poppins', sans-serif;
     color: white;
-}
-
-/* Centered Login Box */
-.container {
-    height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-/* Glassmorphism Effect */
-.login-box {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 30px;
-    border-radius: 15px;
-    width: 500px;
+/* Header */
+.header {
+    background: #8B0000; /* Dark red  */
+    padding: 70px; /* Increased padding to make the header broader */
     text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Logo/Icon */
-.logo {
-    font-size: 50px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    .header h1 {
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+/* White Box with Red Borders */
+.white-box {
+    background: white;
+    border: 5px solid #8B0000; /* Thick red border */
+    margin: 20px 40px; /* Adjusted margin to match the spacing in the WhatsApp image */
+    padding: 20px; /* Inner padding for the white box */
+    flex: 1;
+}
+
+/* Container */
+.container {
+    padding: 0; /* Remove extra padding since the white-box already has padding */
+}
+
+/* Logo Section */
+.logo-section {
+    text-align: center;
+    color: black;
+    position: relative;
+    top: 50px; /* Adjusted to align the logos with the Emp ID box */
+}
+
+    .logo-section img.logo {
+        width: 150px; /* Increased size to make Training.jpg larger */
+        height: auto;
+        margin-bottom: 5px; /* Reduced spacing below the image */
+    }
+
+    .logo-section .slogan {
+        font-size: 14px; /* Matches the font size of "Safety in Each & Every Deed" */
+        font-weight: 500;
+        margin: 0; /* Reduced spacing */
+    }
+
+    .logo-section .refinery {
+        font-size: 14px; /* Matches the font size of "Gujarat Refinery" */
+        font-weight: 500;
+        margin: 5px 0; /* Adjusted spacing */
+    }
+
+    .logo-section .footer-logos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5px; /* Reduced spacing above the logos */
+    }
+
+        .logo-section .footer-logos img {
+            width: 40px; /* Smaller than the Training.jpg logo */
+            height: auto;
+            margin: 0 5px; /* Adjusted spacing between logos */
+        }
+
+/* Login Box */
+.login-box {
+    background: #4682B4; /* Steel blue to match the screenshot */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 150%;
+    max-width: 450px; /* Slightly increased to accommodate larger input boxes */
+    margin: 0 auto; /* Centers the login box */
+}
+
+/* Instruction Text */
+.instruction {
+    color: #FFA500; /* Orange to match the screenshot */
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-align: center; /* Center the instruction text */
 }
 
 /* Input Fields */
 .form-control {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: black !important;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 12px; /* Increased padding to make the input boxes bigger */
+    width: 100%;
+    font-size: 16px; /* Increased font size for better readability */
+    height: 50px; /* Increased height of the input boxes */
 }
 
-    .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.7);
+    .form-control:focus {
+        background: rgba(255, 255, 255, 1) !important;
+        outline: none;
+        box-shadow: none;
+        border-color: #4682B4;
     }
 
-    .form-control:focus {
-        background: rgba(255, 255, 255, 0.3);
-        outline: none;
-        color: white;
-        box-shadow: none;
+    .form-control::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Autofill Styling */
+    .form-control:-webkit-autofill,
+    .form-control:-webkit-autofill:hover,
+    .form-control:-webkit-autofill:focus,
+    .form-control:-webkit-autofill:active {
+        background: rgba(255, 255, 255, 0.9) !important;
+        color: black !important;
+        -webkit-text-fill-color: black !important;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.9) inset !important;
+        transition: background-color 5000s ease-in-out 0s;
     }
 
 /* Buttons */
-.btn-primary {
-    background: #ff4b5c;
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-primary.login-btn {
+    background: #228B22; /* Forest green to match the screenshot */
     border: none;
     padding: 10px;
-    font-size: 18px;
-    border-radius: 25px;
+    font-size: 16px;
+    border-radius: 5px;
     width: 100%;
     transition: 0.3s;
 }
 
-    .btn-primary:hover {
-        background: #ff6b7a;
+    .btn-primary.login-btn:hover {
+        background: #2E8B57;
     }
 
-.logo img {
-    width: 100px; /* Adjust size as needed */
-    height: auto;
-    margin-bottom: 15px;
+.btn-secondary.clear-btn {
+    background: #1E90FF; /* Dodger blue to match the screenshot */
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    width: 100%;
+    transition: 0.3s;
 }
 
+    .btn-secondary.clear-btn:hover {
+        background: #4682B4;
+    }
 
-/* Links */
-a {
-    color: #ddd;
-    text-decoration: none;
+/* Footer */
+footer {
+    background: #8B0000;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
 }
 
-    a:hover {
-        color: #ff4b5c;
+.footer-content {
+    position: relative;
+}
+
+    .footer-content p {
+        margin: 2px 0; /* Reduced spacing to match the WhatsApp image */
+    }
+
+.footer-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.footer-logos-right {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 5px; /* Adjusted spacing between logos */
+}
+
+    .footer-logos-right img {
+        width: 40px; /* Matches the size of the logos in the WhatsApp image */
+        height: auto;
     }

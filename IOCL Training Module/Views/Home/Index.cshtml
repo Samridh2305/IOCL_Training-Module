@@ -18,17 +18,35 @@
     <header class="hero">
         <img src="/images/IOCL Logo high res.png" alt="Indian Oil Logo" class="logo">
         <div class="container text-center text-white">
-            <h1>Fueling Progress, Powering the Nation – IndianOil's Commitment to  <span class="highlight">Excellence.</span></h1>
+            <h1>Fueling Progress, Powering the Nation – IndianOil's Commitment to <span class="highlight">Excellence.</span></h1>
             <p>Experience innovation and sustainability with IndianOil as you fuel the nation's progress.</p>
-            <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login</a>
         </div>
     </header>
+
+    <!-- New Button Section -->
+    <section class="button-section py-3">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <a asp-area="" asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-primary w-100">Dashboard</a>
+                </div>
+                <div class="col-md-3">
+                    <a asp-area="" asp-controller="Employee" asp-action="Index" class="btn btn-outline-success w-100">View Employee list</a>
+                </div>
+                <div class="col-md-3">
+                    <a asp-area="" asp-controller="Training" asp-action="Index" class="btn btn-outline-warning w-100">View my Training</a>
+                </div>
+                <div class="col-md-3">
+                    <a asp-area="" asp-controller="TrainingStatus" asp-action="Index" class="btn btn-outline-danger w-100">View my Subordinates' Trainings</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Introduction Section -->
     <section class="introduction">
         <div class="container">
-            <h2>
-                About US</h2>
+            <h2>About Us</h2>
             <p>
                 Our vision is to be the 'Energy of India' and to become 'A globally admired company.' As we step into an era of transformation, we are broadening our horizons, expanding across new vistas, and infusing new-age dynamism among our employees. Our journey, which began with the merger of Indian Oil Corporation Ltd. and Indian Refineries Ltd. in 1964, has been guided by our core values of Care, Innovation, Passion, and Trust. These values embody the collective conscience of IndianOil and its people, steering us towards our North Star - being the Energy of India and Globally Admired.
             </p>
