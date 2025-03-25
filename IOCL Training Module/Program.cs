@@ -26,7 +26,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 // Add session services
-builder.Services.AddSession();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);  // Keep session active for 30 mins
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 

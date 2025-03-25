@@ -2,6 +2,7 @@
 using IOCL_Training_Module.Data;
 using IOCL_Training_Module.Models;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 public class EmployeeController : Controller
 {
@@ -12,14 +13,7 @@ public class EmployeeController : Controller
         _context = context;
     }
 
-    // Helper method to check if user is admin
-    private bool IsAdmin()
-    {
-        var role = HttpContext.Session.GetString("Role");
-        return role == "Admin";
-    }
-
-    // Index (accessible to all logged-in users)
+    // Index (Accessible to all logged-in users)
     public IActionResult Index()
     {
         if (string.IsNullOrEmpty(HttpContext.Session.GetString("EmpNo")))
@@ -29,13 +23,9 @@ public class EmployeeController : Controller
         return View(_context.Employees.ToList());
     }
 
-    // Create (Admin only)
+    // Create (Now open to all logged-in users)
     public IActionResult Create()
     {
-        if (!IsAdmin())
-        {
-            return Unauthorized("Only Admins can create employees.");
-        }
         return View();
     }
 
@@ -43,11 +33,6 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(Employee employee)
     {
-        if (!IsAdmin())
-        {
-            return Unauthorized("Only Admins can create employees.");
-        }
-
         if (ModelState.IsValid)
         {
             _context.Employees.Add(employee);
@@ -57,14 +42,9 @@ public class EmployeeController : Controller
         return View(employee);
     }
 
-    // Edit (Admin only)
+    // Edit (Now open to all logged-in users)
     public IActionResult Edit(string id)
     {
-        if (!IsAdmin())
-        {
-            return Unauthorized("Only Admins can edit employees.");
-        }
-
         var employee = _context.Employees.Find(id);
         if (employee == null)
         {
@@ -77,11 +57,6 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Edit(string id, Employee employee)
     {
-        if (!IsAdmin())
-        {
-            return Unauthorized("Only Admins can edit employees.");
-        }
-
         if (id != employee.EmpNo)
         {
             return BadRequest();
@@ -96,14 +71,9 @@ public class EmployeeController : Controller
         return View(employee);
     }
 
-    // Delete (Admin only)
+    // Delete (Now open to all logged-in users)
     public IActionResult Delete(string id)
     {
-        if (!IsAdmin())
-        {
-            return Unauthorized("Only Admins can delete employees.");
-        }
-
         var employee = _context.Employees.Find(id);
         if (employee == null)
         {
@@ -116,11 +86,6 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(string EmpNo)
     {
-        if (!IsAdmin())
-        {
-            return Unauthorized("Only Admins can delete employees.");
-        }
-
         var employee = _context.Employees.Find(EmpNo);
         if (employee != null)
         {
