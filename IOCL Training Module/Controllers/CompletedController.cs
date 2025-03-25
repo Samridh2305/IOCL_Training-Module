@@ -5,7 +5,7 @@ using IOCL_Training_Module.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Http; // Added for session handling
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
@@ -25,12 +25,14 @@ namespace IOCL_Training_Module.Controllers
             string trainingName, string venue, string type, string department, string status,
             string safetyTraining, DateTime? fromDate, DateTime? toDate)
         {
-            // Get the currently logged-in employee's EmpNo
-            var empNo = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // 🔹 Get the currently logged-in employee's EmpNo from session
+            var empNo = HttpContext.Session.GetString("EmpNo");
             if (string.IsNullOrEmpty(empNo))
             {
+                Console.WriteLine("User is not authenticated.");
                 return Unauthorized(); // Ensure user is logged in
             }
+            Console.WriteLine($"Logged in user: {empNo}");
 
             // Fetch completed trainings for the logged-in employee
             var completedTrainings = _context.CompletedTrainings
