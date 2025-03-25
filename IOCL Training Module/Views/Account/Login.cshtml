@@ -9,53 +9,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - IOCL Training Track Record</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="header">
-        <h1>IOCL Training Track Record</h1>
-    </div>
-
-    <div class="white-box">
+    <!-- Main Content -->
+    <div class="main-content">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-sm-12">
-                    <div class="logo-section">
-                        <img src="~/Images/Training.jpg" alt="Training Logo" class="logo" />
-                        <p class="slogan">Training Management Track Record</p>
-                        <p class="refinery">Gujarat Refinery</p>
-                        <div class="footer-logos">
-                            <img src="~/Images/IOCL Logo high res.png" alt="IndianOil Logo" />
-                            <img src="~/Images/IOCL brand mascot.png" alt="Gujarat Refinery Logo" />
-                        </div>
-                    </div>
+            <div class="row align-items-center">
+                <!-- Left Section: Logo and Heading -->
+                <div class="col-md-8 text-center text-md-start">
+                    <img src="/Images/TMS.jpg" alt="Training Logo" class="tms-logo mb-3" />
+                    <h1 class="main-heading">
+                        IOCL <span class="highlight">Training</span> Track Record
+                    </h1>
                 </div>
-                <div class="col-md-8 col-sm-12">
-                    <div class="login-box">
-                        <div class="instruction">
-                            <span>» Enter Emp Id and Password</span>
-                        </div>
 
+                <!-- Right Section: Login Box -->
+                <div class="col-md-4">
+                    <div class="login-box">
+                        <div class="user-icon">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/user.png" alt="User Icon" />
+                        </div>
                         @if (ViewBag.Error != null)
                         {
                             <div class="alert alert-danger" role="alert">
                                 @ViewBag.Error
                             </div>
                         }
-
                         <form asp-controller="Account" asp-action="Login" method="post">
                             <div class="mb-3">
-                                <label for="EmpNo">Emp ID</label>
-                                <input type="text" class="form-control" id="EmpNo" name="EmpNo" required />
+                                <input type="text" class="form-control" id="EmpNo" name="EmpNo" placeholder="Emp ID" maxlength="6" oninput="validateEmpId(this)" onkeydown="restrictKeys(event)" required />
+                                <span id="empIdError" class="error-message"></span>
                             </div>
                             <div class="mb-3">
-                                <label for="Password">Password</label>
-                                <input type="password" class="form-control" id="Password" name="Password" required />
+                                <input type="password" class="form-control" id="Password" name="Password" placeholder="Password" required />
                             </div>
                             <div class="form-group buttons">
                                 <button type="submit" class="btn btn-primary login-btn">Log in</button>
-                                <button type="button" class="btn btn-secondary clear-btn" onclick="document.querySelector('form').reset();">Clear</button>
+                                <button type="button" class="btn btn-secondary clear-btn" onclick="document.querySelector('form').reset(); document.getElementById('empIdError').textContent = '';">Clear</button>
                             </div>
                         </form>
                     </div>
@@ -64,17 +57,77 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logos">
-                <p>2025 | Developed & Maintained by IS Department | Gujarat Refinery | IndianOil Corporation Ltd.</p>
-                <p>Use Internet Explorer V 9 & Above for better UI experience.</p>
-                <div class="footer-logos-right">
-                    <img src="~/Images/IOCL brand mascot.png" alt="Gujarat Refinery Logo" />
-                    <img src="~/Images/IOCL Logo high res.png" alt="IndianOil Logo" />
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-start">
+                    <a href="https://iocl.com" target="_blank">
+                        <img src="/Images/IOCL Logo high res.png" alt="IOCL Logo" class="footer-logo" />
+                    </a>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h5>Contact Us</h5>
+                    <p>Email: info@iocl.com</p>
+                    <p>Phone: +91-11-26260000</p>
+                    <p>Address: IndianOil Corporation Ltd., Gujarat Refinery, Vadodara, Gujarat, India</p>
+                </div>
+                <div class="col-md-4 text-center text-md-end follow-us-section">
+                    <h5>Follow Us</h5>
+                    <div class="social-links">
+                        <a href="https://twitter.com/IndianOilcl" target="_blank" class="social-icon">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.facebook.com/IndianOilCorpLimited" target="_blank" class="social-icon">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/indianoilcorp" target="_blank" class="social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
+
+    <!-- JavaScript for Emp ID Validation -->
+    <script>
+        function restrictKeys(event) {
+            // Block Tab (keyCode 9) and Spacebar (keyCode 32)
+            if (event.keyCode === 9 || event.keyCode === 32) {
+                event.preventDefault();
+                return false;
+            }
+
+            // Allow only letters (A-Z, a-z) and numbers (0-9)
+            // Block all special characters
+            const allowedKeys = /^[A-Za-z0-9]$/;
+            const isSpecialKey = event.key.length === 1 && !allowedKeys.test(event.key);
+
+            // Allow control keys like Backspace (keyCode 8), Arrow keys (37-40), etc.
+            const isControlKey = event.keyCode === 8 || (event.keyCode >= 37 && event.keyCode <= 40);
+
+            if (isSpecialKey && !isControlKey) {
+                event.preventDefault();
+                const empIdError = document.getElementById('empIdError');
+                empIdError.textContent = 'Only letters and numbers are allowed (max 6 characters).';
+                return false;
+            }
+        }
+
+        function validateEmpId(input) {
+            const empId = input.value;
+            const empIdError = document.getElementById('empIdError');
+            const regex = /^[A-Za-z0-9]{0,6}$/; // Allow only letters and numbers, up to 6 characters
+
+            if (!regex.test(empId)) {
+                // If invalid characters are entered, remove them
+                input.value = empId.replace(/[^A-Za-z0-9]/g, '');
+                empIdError.textContent = 'Only letters and numbers are allowed (max 6 characters).';
+            } else {
+                empIdError.textContent = ''; // Clear error message if valid
+            }
+        }
+    </script>
 </body>
 </html>
