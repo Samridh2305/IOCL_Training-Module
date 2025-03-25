@@ -2,8 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using IOCL_Training_Module.Data;
 using IOCL_Training_Module.Models;
-using System.Threading.Tasks;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 
 namespace IOCL_Training_Module.Controllers
 {
@@ -16,127 +20,65 @@ namespace IOCL_Training_Module.Controllers
             _context = context;
         }
 
-        // GET: Completed
-        public async Task<IActionResult> Index()
+        // GET: Completed Trainings
+        public async Task<IActionResult> Index(
+            string trainingName, string venue, string type, string department, string status,
+            string safetyTraining, DateTime? fromDate, DateTime? toDate)
         {
-            var completedTrainings = await _context.CompletedTrainings
-                .Include(c => c.Employee)
-                .Include(c => c.Training)
-                .ToListAsync();
-            return View(completedTrainings);
-        }
-
-        // GET: Completed/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var completed = await _context.CompletedTrainings
-                .Include(c => c.Employee)
-                .Include(c => c.Training)
-                .FirstOrDefaultAsync(m => m.SrNo == id);
-
-            if (completed == null)
-                return NotFound();
-
-            return View(completed);
-        }
-
-        // GET: Completed/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Completed/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SrNo,EmpNo,TrainingID,FromDate,ToDate")] Completed completed)
-        {
-            if (ModelState.IsValid)
+            // Get the currently logged-in employee's EmpNo
+            var empNo = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(empNo))
             {
-                _context.Add(completed);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Unauthorized(); // Ensure user is logged in
             }
-            return View(completed);
-        }
 
-        // GET: Completed/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-                return NotFound();
+            // Fetch completed trainings for the logged-in employee
+            var completedTrainings = _context.CompletedTrainings
+                .Include(c => c.Training)  // Include Training details
+                .Where(c => c.EmpNo == empNo)  // Filter for the logged-in employee
+                .AsQueryable();
 
-            var completed = await _context.CompletedTrainings.FindAsync(id);
-            if (completed == null)
-                return NotFound();
+            // Apply filters if provided
+            if (!string.IsNullOrEmpty(trainingName))
+                completedTrainings = completedTrainings.Where(c => c.Training!.TrainingName.Contains(trainingName));
 
-            return View(completed);
-        }
+            if (!string.IsNullOrEmpty(venue))
+                completedTrainings = completedTrainings.Where(c => c.Training!.Venue.Contains(venue));
 
-        // POST: Completed/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SrNo,EmpNo,TrainingID,FromDate,ToDate")] Completed completed)
-        {
-            if (id != completed.SrNo)
-                return NotFound();
+            if (!string.IsNullOrEmpty(type))
+                completedTrainings = completedTrainings.Where(c => c.Training!.Type == type);
 
-            if (ModelState.IsValid)
+            if (!string.IsNullOrEmpty(department))
+                completedTrainings = completedTrainings.Where(c => c.Training!.Department == department);
+
+            if (!string.IsNullOrEmpty(status))
+                completedTrainings = completedTrainings.Where(c => c.Training!.Status == status);
+
+            if (!string.IsNullOrEmpty(safetyTraining))
+                completedTrainings = completedTrainings.Where(c => c.Training!.SafetyTraining == safetyTraining);
+
+            if (fromDate.HasValue)
+                completedTrainings = completedTrainings.Where(c => c.FromDate >= fromDate.Value);
+
+            if (toDate.HasValue)
+                completedTrainings = completedTrainings.Where(c => c.ToDate <= toDate.Value);
+
+            // Fetch distinct dropdown options
+            var trainingTypes = await _context.Trainings.Select(t => t.Type).Distinct().ToListAsync();
+            var departments = await _context.Trainings.Select(t => t.Department).Distinct().ToListAsync();
+            var statuses = await _context.Trainings.Select(t => t.Status).Distinct().ToListAsync();
+
+            // Assign data to ViewBag as List<SelectListItem>
+            ViewBag.TrainingTypes = trainingTypes.Select(t => new SelectListItem { Value = t, Text = t }).ToList();
+            ViewBag.Departments = departments.Select(d => new SelectListItem { Value = d, Text = d }).ToList();
+            ViewBag.Statuses = statuses.Select(s => new SelectListItem { Value = s, Text = s }).ToList();
+            ViewBag.SafetyTrainings = new List<SelectListItem>
             {
-                try
-                {
-                    _context.Update(completed);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CompletedExists(completed.SrNo))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(completed);
-        }
+                new SelectListItem { Value = "Yes", Text = "Yes" },
+                new SelectListItem { Value = "No", Text = "No" }
+            };
 
-        // GET: Completed/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var completed = await _context.CompletedTrainings
-                .Include(c => c.Employee)
-                .Include(c => c.Training)
-                .FirstOrDefaultAsync(m => m.SrNo == id);
-
-            if (completed == null)
-                return NotFound();
-
-            return View(completed);
-        }
-
-        // POST: Completed/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var completed = await _context.CompletedTrainings.FindAsync(id);
-            if (completed != null)
-            {
-                _context.CompletedTrainings.Remove(completed);
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool CompletedExists(int id)
-        {
-            return _context.CompletedTrainings.Any(e => e.SrNo == id);
+            return View(await completedTrainings.ToListAsync());
         }
     }
 }

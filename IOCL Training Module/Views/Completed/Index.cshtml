@@ -1,0 +1,141 @@
+﻿@model List<IOCL_Training_Module.Models.Completed>
+
+@{
+    ViewData["Title"] = "My Trainings";
+}
+
+<div class="container mt-4">
+    <h2>My Completed Trainings</h2>
+
+    <!-- Filter Form -->
+    <form method="get" class="mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="trainingName">Training Name:</label>
+                <input type="text" name="trainingName" class="form-control" value="@Context.Request.Query["trainingName"]">
+            </div>
+            <div class="col-md-3">
+                <label for="venue">Venue:</label>
+                <input type="text" name="venue" class="form-control" value="@Context.Request.Query["venue"]">
+            </div>
+            <div class="col-md-3">
+                <label for="type">Type:</label>
+                <select id="type" name="type" class="form-control">
+                    <option value="">-- Select Type --</option>
+                    @if (ViewBag.TrainingTypes is List<SelectListItem> trainingTypes)
+                    {
+                        @foreach (var item in trainingTypes)
+                        {
+                            <option value="@item.Value" selected="@(item.Value == Context.Request.Query["type"] ? "selected" : null)">
+                                @item.Text
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="department">Department:</label>
+                <select name="department" class="form-control">
+                    <option value="">-- Select Department --</option>
+                    @if (ViewBag.Departments is List<SelectListItem> departments)
+                    {
+                        @foreach (var item in departments)
+                        {
+                            <option value="@item.Value" selected="@(item.Value == Context.Request.Query["department"] ? "selected" : null)">
+                                @item.Text
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="status">Status:</label>
+                <select name="status" class="form-control">
+                    <option value="">-- Select Status --</option>
+                    @if (ViewBag.Statuses is List<SelectListItem> statuses)
+                    {
+                        @foreach (var item in statuses)
+                        {
+                            <option value="@item.Value" selected="@(item.Value == Context.Request.Query["status"] ? "selected" : null)">
+                                @item.Text
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="safetyTraining">Safety Training:</label>
+                <select name="safetyTraining" class="form-control">
+                    <option value="">-- Select Safety Training --</option>
+                    @if (ViewBag.SafetyTrainings is List<SelectListItem> safetyTrainings)
+                    {
+                        @foreach (var item in safetyTrainings)
+                        {
+                            <option value="@item.Value" selected="@(item.Value == Context.Request.Query["safetyTraining"] ? "selected" : null)">
+                                @item.Text
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="fromDate">From Date:</label>
+                <input type="date" name="fromDate" class="form-control" value="@Context.Request.Query["fromDate"]">
+            </div>
+            <div class="col-md-3">
+                <label for="toDate">To Date:</label>
+                <input type="date" name="toDate" class="form-control" value="@Context.Request.Query["toDate"]">
+            </div>
+            <div class="col-md-3 mt-4">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="@Url.Action("Index", "Completed")" class="btn btn-secondary">Clear</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Completed Trainings Table -->
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Training Name</th>
+                    <th>Venue</th>
+                    <th>Type</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Safety Training</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Duration (Days)</th>
+                    <th>Faculty Name</th>
+                    <th>FPR</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var training in Model)
+                {
+                    <tr>
+                        <td>@training.Training?.TrainingName</td>
+                        <td>@training.Training?.Venue</td>
+                        <td>@training.Training?.Type</td>
+                        <td>@training.Training?.Department</td>
+                        <td>@training.Training?.Status</td>
+                        <td>@training.Training?.SafetyTraining</td>
+                        <td>@training.FromDate.ToShortDateString()</td>
+                        <td>@training.ToDate.ToShortDateString()</td>
+                        <td>@training.Training?.Duration</td>
+                        <td>@training.Training?.FacultyName</td>
+                        <td>@training.Training?.FPR</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No completed trainings found.</p>
+    }
+
+    <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary">Back to Dashboard</a>
+</div>
