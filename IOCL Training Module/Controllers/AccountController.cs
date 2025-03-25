@@ -4,6 +4,7 @@ using IOCL_Training_Module.Models; // Employee model
 using Microsoft.AspNetCore.Http; // For session handling
 using System.Linq; // For LINQ queries
 using System.Threading.Tasks;
+using System.Text.RegularExpressions; // For regular expressions
 
 public class AccountController : Controller
 {
@@ -22,6 +23,13 @@ public class AccountController : Controller
     [HttpPost]
     public IActionResult Login(string EmpNo, string Password)
     {
+        // Server-side validation for EmpNo
+        if (string.IsNullOrEmpty(EmpNo) || EmpNo.Length > 6 || !Regex.IsMatch(EmpNo, @"^[A-Za-z0-9]{1,6}$"))
+        {
+            ViewBag.Error = "Invalid Employee ID. It must be 1-6 characters long and contain only letters and numbers.";
+            return View();
+        }
+
         var employee = _context.Employees.FirstOrDefault(e => e.EmpNo == EmpNo);
 
         if (employee != null)
@@ -57,11 +65,17 @@ public class AccountController : Controller
         return RedirectToAction("Login", "Account"); // Redirects to login page
     }
 
-
     // POST: Reset Password
     [HttpPost]
     public async Task<IActionResult> ForgotPassword(string EmpNo, string NewPassword, string ConfirmPassword)
     {
+        // Server-side validation for EmpNo
+        if (string.IsNullOrEmpty(EmpNo) || EmpNo.Length > 6 || !Regex.IsMatch(EmpNo, @"^[A-Za-z0-9]{1,6}$"))
+        {
+            ViewBag.Message = "Invalid Employee ID. It must be 1-6 characters long and contain only letters and numbers.";
+            return View();
+        }
+
         if (NewPassword != ConfirmPassword)
         {
             ViewBag.Message = "Passwords do not match!";

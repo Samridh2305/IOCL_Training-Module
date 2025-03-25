@@ -32,9 +32,9 @@ body {
     line-height: 1.2;
 }
 
-.main-heading .highlight {
-    color: #00f;
-}
+    .main-heading .highlight {
+        color: #00f;
+    }
 
 /* TMS Logo */
 .tms-logo {
@@ -59,10 +59,10 @@ body {
     margin-bottom: 20px;
 }
 
-.user-icon img {
-    width: 50px;
-    height: 50px;
-}
+    .user-icon img {
+        width: 50px;
+        height: 50px;
+    }
 
 .form-control {
     background: rgba(255, 255, 255, 0.9) !important;
@@ -75,15 +75,23 @@ body {
     height: 50px;
 }
 
-.form-control:focus {
-    background: rgba(255, 255, 255, 1) !important;
-    outline: none;
-    box-shadow: none;
-    border-color: #ff6200;
-}
+    .form-control:focus {
+        background: rgba(255, 255, 255, 1) !important;
+        outline: none;
+        box-shadow: none;
+        border-color: #ff6200;
+    }
 
-.form-control::placeholder {
-    color: rgba(0, 0, 0, 0.5);
+    .form-control::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: block;
 }
 
 /* Buttons */
@@ -102,9 +110,9 @@ body {
     transition: 0.3s;
 }
 
-.btn-primary.login-btn:hover {
-    background: #2E8B57;
-}
+    .btn-primary.login-btn:hover {
+        background: #2E8B57;
+    }
 
 .btn-secondary.clear-btn {
     background: #1E90FF;
@@ -116,9 +124,9 @@ body {
     transition: 0.3s;
 }
 
-.btn-secondary.clear-btn:hover {
-    background: #4682B4;
-}
+    .btn-secondary.clear-btn:hover {
+        background: #4682B4;
+    }
 
 /* Footer */
 .footer {
@@ -128,15 +136,15 @@ body {
     text-align: center;
 }
 
-.footer h5 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
+    .footer h5 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
 
-.footer p {
-    margin: 5px 0;
-    font-size: 0.9rem;
-}
+    .footer p {
+        margin: 5px 0;
+        font-size: 0.9rem;
+    }
 
 .footer-logo {
     width: 100px;
@@ -162,6 +170,6 @@ body {
     transition: color 0.3s;
 }
 
-.social-icon:hover {
-    color: #ff6200;
-}
+    .social-icon:hover {
+        color: #ff6200;
+    }
