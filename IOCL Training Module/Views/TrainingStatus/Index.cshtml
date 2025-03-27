@@ -7,17 +7,88 @@
 <div class="container mt-4">
     <h2>Training Status of Subordinates</h2>
 
-    <!-- Employee Selection Dropdown -->
+    <!-- 🔹 Filters Form -->
     <form method="get" asp-action="Index">
-        <label for="selectedEmpNo">Select Employee:</label>
-        <select name="selectedEmpNo" id="selectedEmpNo" class="form-control" onchange="this.form.submit()">
-            @foreach (var emp in Model.Subordinates)
-            {
-                <option value="@emp.EmpNo" selected="@(emp.EmpNo == Model.SelectedEmpNo ? "selected" : null)">
-                    @emp.EmpNo - @emp.Name
-                </option>
-            }
-        </select>
+        <div class="row mb-3">
+            <!-- 🔹 Select Subordinate -->
+            <div class="col-md-3">
+                <label for="selectedEmpNo">Select Employee:</label>
+                <select name="selectedEmpNo" id="selectedEmpNo" class="form-control">
+                    <option value="">All Subordinates</option>
+                    @foreach (var emp in Model.Subordinates)
+                    {
+                        <option value="@emp.EmpNo" selected="@(emp.EmpNo == Model.SelectedEmpNo ? "selected" : null)">
+                            @emp.EmpNo - @emp.Name
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <!-- 🔹 Training Name -->
+            <div class="col-md-3">
+                <label for="TrainingName">Training Name:</label>
+                <input type="text" name="TrainingName" class="form-control" value="@Model.TrainingName" />
+            </div>
+
+            <!-- 🔹 Venue -->
+            <div class="col-md-3">
+                <label for="Venue">Venue:</label>
+                <input type="text" name="Venue" class="form-control" value="@Model.Venue" />
+            </div>
+
+            <!-- 🔹 Training Type -->
+            <div class="col-md-3">
+                <label for="Type">Training Type:</label>
+                <select name="Type" class="form-control">
+                    <option value="">All</option>
+                    <option value="General Awareness" selected="@(Model.Type == "General Awareness" ? "selected" : null)">General Awareness</option>
+                    <option value="Functional" selected="@(Model.Type == "Functional" ? "selected" : null)">Functional</option>
+                    <option value="Developmental Training" selected="@(Model.Type == "Developmental Training" ? "selected" : null)">Developmental Training</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <!-- 🔹 Department -->
+            <div class="col-md-3">
+                <label for="Department">Department:</label>
+                <input type="text" name="Department" class="form-control" value="@Model.Department" />
+            </div>
+
+            <!-- 🔹 Status Dropdown -->
+            @* <div class="col-md-3"> *@
+            @*     <label for="Status">Status:</label> *@
+            @*     <select name="Status" class="form-control"> *@
+            @*         <option value="">All</option> *@
+            @*         <option value="Completed" selected="@(Model.Status == "Completed" ? "selected" : null)">Completed</option> *@
+            @*         <option value="Pending" selected="@(Model.Status == "Pending" ? "selected" : null)">Pending</option> *@
+            @*         <option value="Overdue" selected="@(Model.Status == "Overdue" ? "selected" : null)">Overdue</option> *@
+            @*     </select> *@
+            @* </div> *@
+
+            <!-- 🔹 Safety Training Dropdown -->
+            <div class="col-md-3">
+                <label for="SafetyTraining">Safety Training:</label>
+                <select name="SafetyTraining" class="form-control">
+                    <option value="">All</option>
+                    <option value="Yes" selected="@(Model.SafetyTraining == "Yes" ? "selected" : null)">Yes</option>
+                    <option value="No" selected="@(Model.SafetyTraining == "No" ? "selected" : null)">No</option>
+                </select>
+            </div>
+
+            <!-- 🔹 Date Range -->
+            <div class="col-md-3">
+                <label>From Date:</label>
+                <input type="date" name="FromDate" class="form-control" value="@(Model.FromDate?.ToString("yyyy-MM-dd"))" />
+            </div>
+            <div class="col-md-3 mt-2">
+                <label>To Date:</label>
+                <input type="date" name="ToDate" class="form-control" value="@(Model.ToDate?.ToString("yyyy-MM-dd"))" />
+            </div>
+        </div>
+
+        <!-- 🔹 Filter Button -->
+        <button type="submit" class="btn btn-primary">Filter</button>
     </form>
 
     <!-- Completed Trainings Section -->
@@ -29,6 +100,9 @@
                 <tr>
                     <th>Training Code</th>
                     <th>Training Name</th>
+                    <th>Type</th>
+                    <th>Venue</th>
+                    <th>Department</th>
                     <th>Employee No</th>
                     <th>From Date</th>
                     <th>To Date</th>
@@ -40,6 +114,9 @@
                     <tr>
                         <td>@training.Training?.TrainingID</td>
                         <td>@training.Training?.TrainingName</td>
+                        <td>@training.Training?.Type</td>
+                        <td>@training.Training?.Venue</td>
+                        <td>@training.Training?.Department</td>
                         <td>@training.EmpNo</td>
                         <td>@training.FromDate.ToShortDateString()</td>
                         <td>@training.ToDate.ToShortDateString()</td>
@@ -53,7 +130,7 @@
         <p>No completed trainings found.</p>
     }
 
-    <!-- Not Completed Trainings Section -->
+    <!-- Not Completed Trainings -->
     <h3 class="mt-4">Not Completed Trainings</h3>
     @if (Model.NotCompletedTrainings.Any())
     {
@@ -82,7 +159,7 @@
         <p>No not completed trainings found.</p>
     }
 
-    <!-- Upcoming Trainings Section -->
+    <!-- Upcoming Trainings -->
     <h3 class="mt-4">Upcoming Trainings</h3>
     @if (Model.UpcomingTrainings.Any())
     {
