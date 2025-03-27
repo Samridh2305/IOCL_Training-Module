@@ -4,28 +4,98 @@ body {
     margin: 0;
     padding: 0;
     color: white; /* Ensuring text is readable */
+    background-image: url('../Images/bgimg.jpg'); /* Set the body background to the hero section's image */
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed; /* Match the hero section's background behavior */
 }
 
-header {
-    position: absolute;
+/* Headbar Styles (Now contains the logo and button section content) */
+.headbar {
+    background: transparent; /* Keep the headbar transparent */
+    padding: 10px 0;
+    position: fixed;
     top: 0;
-    left: 0;
     width: 100%;
-    background: transparent;
-    z-index: 10;
-    padding: 5px;
+    z-index: 1000;
 }
 
-main {
-    margin: 0;
-    padding: 0;
+/* Logo Section within the Headbar */
+.logo-section {
+    text-align: left; /* Align the logo to the left */
+    padding-left: 15px; /* Add some padding to avoid touching the edge */
 }
 
-/* Logo Styling */
+/* Logo Styles */
 .logo {
-    width: 150px; /* Adjust as needed */
+    width: 150px; /* Match existing logo width */
     height: auto;
-    display: block;
+}
+
+/* Ensure buttons are centered within their container */
+.headbar .row {
+    display: flex;
+    justify-content: center;
+}
+
+/* Button Styles */
+.btn-outline-primary, .btn-outline-success, .btn-outline-warning, .btn-outline-danger {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white; /* White text for readability against varying backgrounds */
+    background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent black background for better contrast */
+}
+
+.btn-outline-primary {
+    border-color: white;
+    color: white;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+
+.btn-outline-success {
+    border-color: white;
+    color: white;
+}
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: white;
+        border-color: #28a745;
+    }
+
+.btn-outline-warning {
+    border-color: white;
+    color: white;
+}
+
+    .btn-outline-warning:hover {
+        background-color: #ffc107;
+        color: #333333;
+        border-color: #ffc107;
+    }
+
+.btn-outline-danger {
+    border-color: white;
+    color: white;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+        border-color: #dc3545;
+    }
+
+/* Main Content Styles */
+main {
+    margin-top: 100px; /* Adjust for the fixed headbar */
+    padding: 0;
 }
 
 /* Hero Section */
@@ -35,12 +105,13 @@ main {
     background-position: center center;
     background-size: cover;
     color: white;
-    padding: 10px 0;
+    padding: 280px 0;
     text-align: center;
     position: relative;
     width: 100%;
     height: 60vh;
     background-attachment: fixed;
+    margin-top:10px;
 }
 
     .hero .highlight {
@@ -99,10 +170,12 @@ main {
     .btn-primary:hover {
         background-color: #0056b3;
     }
+
 /* Features Section */
 .features {
     padding: 50px 0;
     text-align: center;
+    background-color:beige;
 }
 
 .feature-box {
@@ -133,7 +206,7 @@ main {
         margin: 0 auto 15px;
     }
 
-/* Latest News Section */
+/* Back to Top Section */
 .backtotop {
     background: #121212;
     color: white;
@@ -141,7 +214,7 @@ main {
     text-align: center;
 }
 
-.backToTopBtn {
+#backToTopBtn {
     margin-top: 15px;
     background: white;
     color: #1a1a3d;
@@ -149,4 +222,15 @@ main {
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 20px;
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f1f1f1;
+    color: #333333;
+    position: relative;
+    bottom: 0;
+    width: 100%;
 }

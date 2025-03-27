@@ -3,87 +3,51 @@
     Layout = "~/Views/Shared/_Layout_Home.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/css/homepage.css">
-</head>
-<body>
+<!-- Hero Section -->
+<header class="hero">
+    <div class="container text-center text-white">
+        <h1>Fueling Progress, Powering the Nation – IndianOil's Commitment to <span class="highlight">Excellence.</span></h1>
+    </div>
+</header>
 
-    <!-- Hero Section -->
-    <header class="hero">
-        <img src="/images/IOCL Logo high res.png" alt="Indian Oil Logo" class="logo">
-        <div class="container text-center text-white">
-            <h1>Fueling Progress, Powering the Nation – IndianOil's Commitment to <span class="highlight">Excellence.</span></h1>
-            <p>Experience innovation and sustainability with IndianOil as you fuel the nation's progress.</p>
-        </div>
-    </header>
+<!-- Introduction Section -->
+<section class="introduction">
+    <div class="container">
+        <h2>About Us</h2>
+        <p>
+            Our vision is to be the 'Energy of India' and to become 'A globally admired company.' As we step into an era of transformation, we are broadening our horizons, expanding across new vistas, and infusing new-age dynamism among our employees. Our journey, which began with the merger of Indian Oil Corporation Ltd. and Indian Refineries Ltd. in 1964, has been guided by our core values of Care, Innovation, Passion, and Trust. These values embody the collective conscience of IndianOil and its people, steering us towards our North Star - being the Energy of India and Globally Admired.
+        </p>
+    </div>
+</section>
 
-    <!-- New Button Section -->
-    <section class="button-section py-3">
-        <div class="container text-center">
-            <div class="row justify-content-center">
-                <div class="col-md-3">
-                    <a asp-area="" asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-primary w-100">Dashboard</a>
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="feature-box">
+                    <img src="~/images/img1.jpg" alt="Energy">
+                    <h3>Energising the Nation’s Ascent</h3>
+                    <p>IndianOil's relentless pursuit of excellence has garnered prestigious accolades across the global stage. The company is the leading oil and gas PSU from India featuring on 116 position in the Fortune 'Global 500' list. It has maintained its leadership in the ‘BW Top 500’ for the third consecutive year and has been recognized as the most respected oil and gas company by Business World.</p>
                 </div>
-                <div class="col-md-3">
-                    <a asp-area="" asp-controller="Employee" asp-action="Index" class="btn btn-outline-success w-100">View Employee list</a>
-                </div>
-                <div class="col-md-3">
-                    <a asp-area="" asp-controller="Completed" asp-action="Index" class="btn btn-outline-warning w-100">View my Training</a>
-                </div>
-                <div class="col-md-3">
-                    <a asp-area="" asp-controller="TrainingStatus" asp-action="Index" class="btn btn-outline-danger w-100">View my Subordinates' Trainings</a>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-box">
+                    <img src="~/images/img2.jpg" alt="Sustainable">
+                    <h3>Vision for a Sustainable Future</h3>
+                    <p>IndianOil is steadfast in its commitment to shaping the future of energy. The company has set a visionary goal to achieve operational Net-Zero Emissions by 2046, aligning with India’s broader target of Net-Zero by 2070. This ambitious objective highlights IndianOil's dedication to setting new benchmarks in environmental sustainability.</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Introduction Section -->
-    <section class="introduction">
-        <div class="container">
-            <h2>About Us</h2>
-            <p>
-                Our vision is to be the 'Energy of India' and to become 'A globally admired company.' As we step into an era of transformation, we are broadening our horizons, expanding across new vistas, and infusing new-age dynamism among our employees. Our journey, which began with the merger of Indian Oil Corporation Ltd. and Indian Refineries Ltd. in 1964, has been guided by our core values of Care, Innovation, Passion, and Trust. These values embody the collective conscience of IndianOil and its people, steering us towards our North Star - being the Energy of India and Globally Admired.
-            </p>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="feature-box">
-                        <img src="~/images/img1.jpg" alt="Energy">
-                        <h3>Energising the Nation’s Ascent</h3>
-                        <p>IndianOil's relentless pursuit of excellence has garnered prestigious accolades across the global stage. The company is the leading oil and gas PSU from India featuring on 116 position in the Fortune 'Global 500' list. It has maintained its leadership in the ‘BW Top 500’ for the third consecutive year and has been recognized as the most respected oil and gas company by Business World.</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="feature-box">
-                        <img src="~/images/img2.jpg" alt="Sustainable">
-                        <h3>Vision for a Sustainable Future</h3>
-                        <p>IndianOil is steadfast in its commitment to shaping the future of energy. The company has set a visionary goal to achieve operational Net-Zero Emissions by 2046, aligning with India’s broader target of Net-Zero by 2070. This ambitious objective highlights IndianOil's dedication to setting new benchmarks in environmental sustainability.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Back to Top Button -->
-    <section class="backtotop">
-        <div class="container text-center">
-            <button id="backToTopBtn" class="btn btn-secondary">Move back to top</button>
-        </div>
-    </section>
-
-</body>
-</html>
+<!-- Back to Top Button -->
+<section class="backtotop">
+    <div class="container text-center">
+        <button id="backToTopBtn" class="btn btn-secondary">Move back to top</button>
+    </div>
+</section>
 
 <script>
     document.getElementById("backToTopBtn").addEventListener("click", function () {

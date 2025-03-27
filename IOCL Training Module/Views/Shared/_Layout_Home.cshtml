@@ -3,20 +3,48 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Your App</title>
+    <title>@ViewData["Title"] - IndianOil</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/css/homepage.css" asp-append-version="true">
 </head>
 <body>
-    <header>
-        <img src="~/images/IOCL Logo high res.png" alt="Indian Oil Logo" class="logo">
+    <!-- Headbar Section (Logo on the left, buttons on the right, no white space) -->
+    <header class="headbar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <!-- Logo on the left -->
+                <div class="col-md-3 logo-section">
+                    <img src="~/images/IOCL Logo high res.png" alt="Indian Oil Logo" class="logo">
+                </div>
+                <!-- Buttons on the right (no white space on the left) -->
+                <div class="col-md-9">
+                    <div class="row justify-content-center">
+                        <div class="col-md-3">
+                            <a asp-area="" asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-primary w-100">Dashboard</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-area="" asp-controller="Employee" asp-action="Index" class="btn btn-outline-success w-100">View Employee list</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-area="" asp-controller="Completed" asp-action="Index" class="btn btn-outline-warning w-100">View my Training</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-area="" asp-controller="TrainingStatus" asp-action="Index" class="btn btn-outline-danger w-100">View my Subordinates' Trainings</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
-    
+
+    <!-- Main Content -->
     <main>
         @RenderBody()
     </main>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; @DateTime.Now.Year - Your Company</p>
+        <p>© @DateTime.Now.Year - IndianOil</p>
     </footer>
 </body>
 </html>
