@@ -1,7 +1,6 @@
 ﻿@{
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +21,7 @@
                 <div class="col-md-8 text-center text-md-start">
                     <img src="/Images/TMS.jpg" alt="Training Logo" class="tms-logo mb-3" />
                     <h1 class="main-heading">
-                        IOCL <span class="highlight">Training</span> Track Record
+						IOCL <span class="highlight">Training</span> Management System
                     </h1>
                 </div>
 
@@ -40,7 +39,7 @@
                         }
                         <form asp-controller="Account" asp-action="Login" method="post">
                             <div class="mb-3">
-                                <input type="text" class="form-control" id="EmpNo" name="EmpNo" placeholder="Emp ID" maxlength="6" oninput="validateEmpId(this)" onkeydown="restrictKeys(event)" required />
+                                <input type="text" class="form-control" id="EmpNo" name="EmpNo" placeholder="Emp ID" maxlength="6" oninput="validateEmpId(this)" onkeydown="restrictKeys('event')" required />
                                 <span id="empIdError" class="error-message"></span>
                             </div>
                             <div class="mb-3">

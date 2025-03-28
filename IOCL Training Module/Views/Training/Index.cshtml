@@ -4,91 +4,88 @@
     ViewData["Title"] = "Trainings";
 }
 
-<h2>Trainings</h2>
+<div class="container">
+    <h2>Trainings</h2>
+    <hr />
 
-@* <!-- Hamburger Menu for Upcoming Trainings --> *@
-@* <button class="btn btn-secondary" type="button" id="hamburgerMenu"> *@
-@*     ☰ Upcoming Trainings *@
-@* </button> *@
-@* <div id="upcomingTrainings" class="collapse"> *@
-@*     <ul class="list-group mt-2" id="recurringTrainingList"> *@
-@*         <li class="list-group-item">Loading...</li> *@
-@*     </ul> *@
-@* </div> *@
+    <!-- Filter Form -->
+    <form method="get">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="trainingName">Training Name:</label>
+                <input type="text" id="trainingName" name="trainingName" class="form-control" value="@Context.Request.Query["trainingName"]" />
+            </div>
 
-<hr />
+            <div class="col-md-3">
+                <label for="venue">Venue:</label>
+                <input type="text" id="venue" name="venue" class="form-control" value="@Context.Request.Query["venue"]" />
+            </div>
 
-<!-- Filter Form -->
-<form method="get">
-    <div class="form-group">
-        <label for="trainingName">Training Name:</label>
-        <input type="text" id="trainingName" name="trainingName" class="form-control" value="@Context.Request.Query["trainingName"]" />
-    </div>
+            <div class="col-md-3">
+                <label for="fromDate">From Date:</label>
+                <input type="date" id="fromDate" name="fromDate" class="form-control" value="@Context.Request.Query["fromDate"]" />
+            </div>
 
-    <div class="form-group">
-        <label for="venue">Venue:</label>
-        <input type="text" id="venue" name="venue" class="form-control" value="@Context.Request.Query["venue"]" />
-    </div>
+            <div class="col-md-3">
+                <label for="toDate">To Date:</label>
+                <input type="date" id="toDate" name="toDate" class="form-control" value="@Context.Request.Query["toDate"]" />
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="fromDate">From Date:</label>
-        <input type="date" id="fromDate" name="fromDate" class="form-control" value="@Context.Request.Query["fromDate"]" />
-    </div>
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <label for="type">Type:</label>
+                <select id="type" name="type" class="form-control">
+                    @if (ViewBag.TrainingTypes != null)
+                    {
+                        foreach (var item in (List<SelectListItem>)ViewBag.TrainingTypes)
+                        {
+                            <option value="@item.Value" selected="@(item.Value == Context.Request.Query["type"] ? "selected" : null)">
+                                @item.Text
+                            </option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="">-- Select Type --</option>
+                    }
+                </select>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="toDate">To Date:</label>
-        <input type="date" id="toDate" name="toDate" class="form-control" value="@Context.Request.Query["toDate"]" />
-    </div>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
 
-    <div class="form-group">
-        <label for="type">Type:</label>
-        <select id="type" name="type" class="form-control">
-            @if (ViewBag.TrainingTypes != null)
-            {
-                foreach (var item in (List<SelectListItem>)ViewBag.TrainingTypes)
-                {
-                    <option value="@item.Value" selected="@(item.Value == Context.Request.Query["type"] ? "selected" : null)">
-                        @item.Text
-                    </option>
-                }
-            }
-            else
-            {
-                <option value="">-- Select Type --</option>
-            }
-        </select>
-    </div>
+    <hr />
 
-    <button type="submit" class="btn btn-primary">Filter</button>
-    <a href="@Url.Action("Index")" class="btn btn-secondary">Reset</a>
-</form>
-
-<hr />
-
-<!-- Training Table -->
-<table class="table">
-    <thead>
-        <tr>
-            <th>Training Name</th>
-            <th>Venue</th>
-            <th>From Date</th>
-            <th>To Date</th>
-            <th>Type</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <!-- Training Table -->
+    <table class="table">
+        <thead>
             <tr>
-                <td>@item.TrainingName</td>
-                <td>@item.Venue</td>
-                <td>@item.FromDate.ToString("yyyy-MM-dd")</td>
-                <td>@item.ToDate.ToString("yyyy-MM-dd")</td>
-                <td>@item.Type</td>
+                <th>Training Name</th>
+                <th>Venue</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>Type</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TrainingName</td>
+                    <td>@item.Venue</td>
+                    <td>@item.FromDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.ToDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Type</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <script>
     document.getElementById("hamburgerMenu").addEventListener("click", function () {
@@ -120,4 +117,131 @@
         }
     });
 </script>
+<style>
+    /* General Page Styles */
+    body {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    /* Centered Container */
+    .container {
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        max-width: 1100px;
+        width: 100%;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    /* Header */
+    h2 {
+        text-align: center;
+        font-weight: 600;
+        color: #1e3c72;
+    }
+
+    /* Forms */
+    form {
+        background: rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        font-weight: 600;
+        color: #2a5298;
+    }
+
+    input,
+    select {
+        border: 2px solid #d1d9e6;
+        padding: 10px;
+        border-radius: 6px;
+        width: 100%;
+        transition: 0.3s ease;
+    }
+
+        input:focus,
+        select:focus {
+            border-color: #007bff;
+            box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.3);
+        }
+
+    /* Buttons */
+    .btn-primary {
+        background: #007bff;
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        display: inline-block;
+        width: 150px;
+        text-align: center;
+        border-radius: 6px;
+        transition: 0.3s;
+    }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+    .btn-secondary {
+        background: #6c757d;
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        display: inline-block;
+        width: 150px;
+        text-align: center;
+        border-radius: 6px;
+        transition: 0.3s;
+    }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+    /* Table */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    thead {
+        background: #1e3c72;
+        color: white;
+        text-align: center;
+    }
+
+        thead th {
+            padding: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+    tbody tr {
+        text-align: center;
+        background: #fff;
+        transition: background 0.3s;
+    }
+
+        tbody tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        tbody tr:hover {
+            background: #cce5ff;
+        }
+</style>
 
