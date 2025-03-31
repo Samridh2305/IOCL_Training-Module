@@ -22,6 +22,41 @@ public class EmployeeController : Controller
         }
         return View(_context.Employees.ToList());
     }
+    [HttpGet]
+    public IActionResult GetEmployees(string? empNo, string? name)
+    {
+        // 🔹 Get Logged-in Employee Number from Session
+        string? loggedInEmpNo = HttpContext.Session.GetString("EmpNo");
+
+        if (string.IsNullOrEmpty(loggedInEmpNo))
+        {
+            return Unauthorized(); // If session expired, return Unauthorized
+        }
+
+        // 🔹 Fetch Subordinates of the Logged-in Employee
+        var subordinates = _context.Reportings
+            .Where(r => r.Reporting == loggedInEmpNo)
+            .Select(r => r.EmpNo)
+            .ToList();
+
+        // 🔹 Fetch Employees who are Subordinates
+        var employees = _context.Employees
+            .Where(e => subordinates.Contains(e.EmpNo));
+
+        // 🔹 Apply Filters (if provided)
+        if (!string.IsNullOrEmpty(empNo))
+        {
+            employees = employees.Where(e => e.EmpNo.Contains(empNo));
+        }
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            employees = employees.Where(e => e.Name.Contains(name));
+        }
+
+        return Json(employees.Select(e => new { e.EmpNo, e.Name }));
+    }
+
 
     // Create (Now open to all logged-in users)
     public IActionResult Create()

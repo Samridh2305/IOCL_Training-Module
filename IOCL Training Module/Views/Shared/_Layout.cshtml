@@ -243,12 +243,12 @@
         <a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
         <a asp-area="" asp-controller="Employee" asp-action="Index">Employee</a>
         <a asp-area="" asp-controller="Training" asp-action="Index">Training</a>
-        <a asp-area="" asp-controller="Dashboard" asp-action="Completed">Completed Trainings</a>
-        <a asp-area="" asp-controller="Dashboard" asp-action="NotCompleted">Not Completed Trainings</a>
-        <a asp-area="" asp-controller="TrainingStatus" asp-action="Index">Training Status Section</a>
-        <a asp-area="" asp-controller="Completed" asp-action="Index">Trainings</a>
+        @* <a asp-area="" asp-controller="Dashboard" asp-action="Completed">Completed Trainings</a> *@
+        @* <a asp-area="" asp-controller="Dashboard" asp-action="NotCompleted">Not Completed Trainings</a> *@
+        <a asp-area="" asp-controller="TrainingStatus" asp-action="Index">View my Subordinates' Trainings</a>
+        <a asp-area="" asp-controller="Completed" asp-action="Index">View my Trainings</a>
     </div>
-
+    
     <!-- Left Sidebar Toggle Button -->
     <button class="sidebar-toggle">◀</button>
 
