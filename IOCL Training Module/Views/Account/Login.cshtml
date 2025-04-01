@@ -39,7 +39,7 @@
                         }
                         <form asp-controller="Account" asp-action="Login" method="post">
                             <div class="mb-3">
-                                <input type="text" class="form-control" id="EmpNo" name="EmpNo" placeholder="Emp ID" maxlength="6" oninput="validateEmpId(this)" onkeydown="restrictKeys('event')" required />
+                                <input type="text" class="form-control" id="EmpNo" name="EmpNo" placeholder="Emp ID" maxlength="6" oninput="validateEmpId(this)" onkeydown="restrictKeys(event)" required />
                                 <span id="empIdError" class="error-message"></span>
                             </div>
                             <div class="mb-3">
