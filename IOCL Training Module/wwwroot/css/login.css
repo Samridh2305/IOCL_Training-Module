@@ -38,10 +38,12 @@ body {
 
 /* TMS Logo */
 .tms-logo {
-    width: 150px;
-    height: 150px;
+    margin-top:50px;
+    width: 190px;
+    height: 190px;
     border-radius: 50%;
     object-fit: cover;
+    margin-left:300px;
 }
 
 /* Login Box */
@@ -60,8 +62,8 @@ body {
 }
 
     .user-icon img {
-        width: 50px;
-        height: 50px;
+        width: 70px;
+        height: 70px;
     }
 
 .form-control {
